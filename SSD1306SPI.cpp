@@ -251,6 +251,42 @@ void SSD1306SPI::showString(uint8_t x,uint8_t y,const char *chr,uint8_t size1,ui
   }
 }
 
+void SSD1306SPI::showPicture(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data)
+{
+  uint16_t j=0;
+  uint8_t i,n,temp,m;
+  uint8_t x0=x, y0=y;
+  height = height/8+((height%8)?1:0);
+  for(n=0;n<height;n++) {
+     for(i=0;i<width;i++) {
+        temp = data[j];
+        j++;
+        for(m=0;m<8;m++) {
+          if(temp&0x01) 
+            drawPoint(x, y, 1);
+          else 
+            drawPoint(x, y, !1);
+          temp>>=1;
+          y++;
+        }
+        x++;
+        if((x-x0)==width) {
+          x=x0;
+          y0=y0+8;
+        }
+        y=y0;
+    }
+  }
+}
+
+void SSD1306SPI::showPictureInFlash(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data)
+{
+  uint8_t* tempData = (uint8_t*)calloc(width*height, sizeof(char));
+  memcpy(tempData, data, width*height);
+  showPicture(x, y, width, height, tempData);
+  free(tempData);
+}
+
 void SSD1306SPI::clearDisplay()
 {
   u8 i,n;

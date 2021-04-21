@@ -43,6 +43,10 @@ public:
 
   void showString(const char* chr);
 
+  void showPicture(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data);
+
+  void showPictureInFlash(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data);
+
   void sync(void);
 
   void setFontSize(const OledFont font);

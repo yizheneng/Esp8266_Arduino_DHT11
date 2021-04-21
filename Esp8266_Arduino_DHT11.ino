@@ -3,6 +3,7 @@
 #include <WiFiUdp.h>
 #include <NTPClient.h>
 #include "SSD1306SPI.h"
+#include "weathericon.h"
 
 DHT dht(D1, DHT11);
 SSD1306SPI oled(D6, D4, D5, D2, D3);
@@ -26,8 +27,10 @@ void setup() {
 
 void loop() {
   char printBuf[100];
+  oled.setFontSize(OLED_FONT_16X8);
+  int i = 0;
   while(1) {
-    if(WiFi.status() == WL_CONNECTED) {
+    /*if(WiFi.status() == WL_CONNECTED) {
       timeClient.update();
     } else {
       static bool connectFlag = false;
@@ -50,12 +53,19 @@ void loop() {
       }
     }
     
-    oled.setXY(0, 8);
+    oled.setXY(0, 16);
     // ip address
     OLED_PRINT("IP:%s\r\ntime:%s\r\ntemp:%d hum:%d\r\n", WiFi.localIP().toString().c_str(), 
                                                         timeClient.getFormattedTime().c_str(),
                                                         (int)dht.readTemperature(),
-                                                        (int)dht.readHumidity());
+                                                        (int)dht.readHumidity());*/
+    if(i >= 64) {
+      i = 0;
+    }
+    oled.showPictureInFlash(64, 0, 64, 64, picture64X64[i]);
+    oled.showPictureInFlash(32, 0, 32, 32, picture32X32[i]);
+    oled.showPictureInFlash(16, 0, 16, 16, picture16X16[i]);
+    i++;
     oled.sync();
     delay(1000);
   }
