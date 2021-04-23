@@ -1,3 +1,5 @@
+#ifndef _SSD_1306_SPI_
+#define _SSD_1306_SPI_
 #include <stdint.h>
 
 #ifdef __AVR__
@@ -85,3 +87,5 @@ private:
 
   uint8_t OLED_GRAM[144][8];  // cache
 };
+
+#endif
