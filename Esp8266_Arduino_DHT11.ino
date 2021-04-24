@@ -3,14 +3,17 @@
 #include <WiFiUdp.h>
 #include <NTPClient.h>
 #include "SSD1306SPI.h"
-//#include "weathericon.h"
-#include "badapple.h"
+#include "weathericon.h"
+//#include "badapple.h"
 #include "button.h"
+#include "weather.h"
 
 DHT dht(D1, DHT11);
 SSD1306SPI oled(D6, D4, D5, D2, D3);
 WiFiUDP ntpUDP;
+WiFiClient weatherClient;
 NTPClient timeClient(ntpUDP, 8 * 60 * 60);
+Weather weather(weatherClient);
 
 char ssid[] = "Cnbot-Work";
 char pass[] = "Cnbot001";
@@ -35,10 +38,12 @@ void loop() {
   char printBuf[100];
   oled.setFontSize(OLED_FONT_8X6);
   int i = 0;
-  int buttonCCounter = 0, buttonLCounter = 0, buttonRCounter = 0;
+  oled.showPictureInFlash(32, 32, 32, 32, picture32X32[WEATHER_ICON_INDEX_GLASSES]);
+  oled.sync();
   while(1) {
     if(WiFi.status() == WL_CONNECTED) {
       timeClient.update();
+      weather.tickOnce();
     } else {
       static bool connectFlag = false;
       if(!connectFlag) {
@@ -66,27 +71,9 @@ void loop() {
                                                         timeClient.getFormattedTime().c_str(),
                                                         (int)dht.readTemperature(),
                                                         (int)dht.readHumidity());
-    oled.setXY(0,0);
-
-    if(buttonL.isClicked()) {
-      buttonLCounter ++;
-    }
-
-    if(buttonC.isClicked()) {
-      buttonCCounter ++;
-    }
-
-    if(buttonR.isClicked()) {
-      buttonRCounter ++;
-    }
-    OLED_PRINT("Button L:%d\r\nButton C:%d\r\nButton R:%d\r\n", buttonLCounter, buttonCCounter, buttonRCounter)
-    /*if(i >= 704) {
-      i = 0;
-    }
-    //oled.showPictureInFlash(32, 0, 32, 32, picture32X32[i]);
-    oled.showPictureInFlash(22, 0, 85, 64, picture85X64[i]);
-    i++;*/
+    
     oled.sync();
-    delay(30);
+    
+    delay(5000);
   }
 }
