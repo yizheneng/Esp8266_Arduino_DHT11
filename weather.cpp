@@ -1,7 +1,6 @@
 #include "weather.h"
 #include "weathericon.h"
-#include <ArduinoJson.h>
-//const char weatherUri[] = "https://api.seniverse.com/v3/weather/daily.json?key=rrpd2zmqkpwlsckt&location=changsha&language=en&unit=c&start=0&days=3";
+#include <Arduino_JSON.h>
 
 Weather::Weather(Client& aClient) :
   client(aClient, "api.seniverse.com"),
@@ -70,19 +69,46 @@ void Weather::updateWeather()
       Serial.println(err);
       
       int bodyLen = client.contentLength();
-      Serial.println(client.responseBody());
+      String content = client.responseBody();
+      Serial.println(content);
 
-      DynamicJsonDocument doc(1024);
-      deserializeJson(doc, client.responseBody().c_str());
-      JsonObject resultObject = doc.as<JsonObject>();
-      for(int i = 0; i < resultObject["results"][0]["daily"].size(); i++) {
-        weathers[i].weatherCodeDay = atoi(resultObject["results"][0]["daily"][i]["code_day"]);
-        weathers[i].highTemp = atoi(resultObject["results"][0]["daily"][i]["high"]);
-        weathers[i].lowTemp =  atoi(resultObject["results"][0]["daily"][i]["low"]);
-        weathers[i].humidity = atoi(resultObject["results"][0]["daily"][i]["humidity"]);
-        Serial.printf("index:%d code_day:%d high:%d low:%d\r\n", i, weathers[i].weatherCodeDay, weathers[i].highTemp, weathers[i].lowTemp);
-        updateFlag = true;
-        lastUpdateTime = millis();
+      JSONVar rootObject = JSON.parse(content);
+      if (JSON.typeof(rootObject) != "object") {
+        Serial.print("Parsing root failed:");
+        Serial.println(JSON.typeof(rootObject));
+        return;
+      }
+
+      if(!rootObject.hasOwnProperty("results")) {
+        Serial.println("Parsing results failed!");
+        return;
+      }
+
+      if(JSON.typeof(rootObject["results"]) != "array") {
+        Serial.println("results is't array!");
+        return;
+      }
+
+      if(rootObject["results"].length() <= 0) {
+        Serial.println("results length error!");
+        return;
+      }
+
+      if(JSON.typeof(rootObject["results"][0]["daily"]) != "array") {
+        Serial.println("daily  is't array!");
+        return;
+      }
+
+      for(int i = 0; i < rootObject["results"][0]["daily"].length(); i++) {
+          Serial.println(JSON.typeof(rootObject["results"][0]["daily"][i]["code_day"]));
+          weathers[i].weatherCodeDay = atoi(rootObject["results"][0]["daily"][i]["code_day"]);
+          weathers[i].highTemp =       atoi(rootObject["results"][0]["daily"][i]["high"]);
+          weathers[i].lowTemp =        atoi(rootObject["results"][0]["daily"][i]["low"]);
+          weathers[i].humidity =       atoi(rootObject["results"][0]["daily"][i]["humidity"]);
+          weathers[i].weatherIconCode = getIconIndex(weathers[i].weatherCodeDay);
+          Serial.printf("index:%d code_day:%d high:%d low:%d\r\n", i, weathers[i].weatherCodeDay, weathers[i].highTemp, weathers[i].lowTemp);
+          updateFlag = true;
+          lastUpdateTime = millis();
       }
     }
   } else {

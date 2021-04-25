@@ -5,6 +5,7 @@
 
 struct WeatherInfo {
   uint8_t weatherCodeDay; // 早上的天气代码
+  uint8_t weatherIconCode;
   int8_t highTemp;        // 最高温度
   int8_t lowTemp;         // 最低温度
   int8_t humidity;        // 湿度
