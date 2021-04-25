@@ -35,6 +35,8 @@ public:
 
     void clearDisplay();
 
+    void printf(char* format, ...);
+
     void setXY(const int8_t x, const int8_t y) {
     this->x = x;
     this->y = y;

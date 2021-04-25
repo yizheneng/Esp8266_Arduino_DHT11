@@ -242,3 +242,15 @@ void DrawOnMemory::showChar(uint8_t chr)
   showChar(x, y, chr, font, 1);
   x += fontWidth;
 }
+
+void DrawOnMemory::printf(char* format, ...)
+{
+  char buf[100];
+  
+  int ret;
+  va_list ap;
+  va_start(ap, format);
+  ret = vsniprintf(buf, sizeof(buf), format, ap);
+  va_end(ap);
+  showString(buf);
+}

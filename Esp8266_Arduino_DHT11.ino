@@ -38,10 +38,7 @@ void setup() {
 }
 
 void loop() {
-//  oled.setFontSize(OLED_FONT_8X6);
   int i = 0;
-//  oled.showPictureInFlash(32, 32, 32, 32, picture32X32[WEATHER_ICON_INDEX_GLASSES]);
-//  oled.sync();
   while(1) {
     if(WiFi.status() == WL_CONNECTED) {
       timeClient.update();
@@ -54,29 +51,18 @@ void loop() {
           Serial.println(WiFi.SSID(i));
           if(WiFi.SSID(i) == ssid) {
             WiFi.begin(ssid, pass);
-//            oled.setXY(0, 32);
-//            OLED_PRINT("SSID:%s\r\n", ssid);
             connectFlag = true;
           } else if(WiFi.SSID(i) == ssid1) {
             WiFi.begin(ssid1, pass1);
-//            oled.setXY(0, 32);
-//            OLED_PRINT("SSID:%s\r\n", ssid1);
             connectFlag = true;
           }
         }  
       }
     }
     
-    // oled.setXY(0, 40);
-    // // ip address
-    // OLED_PRINT("IP:%s\r\ntime:%s\r\ntemp:%d hum:%d\r\n", WiFi.localIP().toString().c_str(), 
-    //                                                     timeClient.getFormattedTime().c_str(),
-    //                                                     (int)dht.readTemperature(),
-    //                                                     (int)dht.readHumidity());
-    
     mainUI.tickOnce();
     oled.syncDisplay(mainUI.getGRam());
     
-    delay(5000);
+    delay(1000);
   }
 }

@@ -29,5 +29,14 @@ int8_t MainUI::tickOnce()
     painter.showString("Waiting...");
   }
   
+  painter.setFontSize(OLED_FONT_16X8);
+  painter.setXY(32, 0);
+  painter.printf("  %s", timeClient.getFormattedTime().c_str());
+  painter.setXY(32, 16);
+  painter.printf(" 2020-04-05");
+  painter.setXY(0, 32);
+  painter.printf("LOW:%d  HIGH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
+  painter.setXY(0, 48);
+  painter.printf("TEMP:%d  HUM:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
   return -1;
 }
