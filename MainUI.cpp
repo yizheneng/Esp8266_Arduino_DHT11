@@ -3,11 +3,16 @@
 #include <NTPClient.h>
 #include "weather.h"
 #include "weathericon.h"
+#include "button.h"
 
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
+extern Button buttonL;
+extern Button buttonC;
+extern Button buttonR;
 
+// 主界面
 MainUI::MainUI() :
   UIInterface()
 {
@@ -38,5 +43,13 @@ int8_t MainUI::tickOnce()
   painter.printf("LOW:%d  HIGH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
   painter.setXY(0, 48);
   painter.printf("TEMP:%d  HUM:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
+
+  if(buttonL.isClicked()) {
+    return UI_INDEX_SYSTEM_INFO_UI;
+  } 
+
+  if(buttonR.isClicked()) {
+    return UI_INDEX_WEATHER_UI;
+  }
   return -1;
 }

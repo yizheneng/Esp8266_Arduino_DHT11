@@ -10,7 +10,8 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
     x(0),
     y(0),
     fontWidth(6),
-    fontHeight(8)
+    fontHeight(8),
+    mode(1)
 {
 
 }
@@ -108,7 +109,7 @@ void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t size1,uint8_
   else size2=(size1/8+((size1%8)?1:0))*(size1/2);  //得到字体一个字符对应点阵集所占的字节数
   chr1=chr-' ';  //计算偏移后的值
   for(i=0;i<size2;i++) {
-    if(size1==8) {temp=asc2_0806[chr1][i];} //调用0806字体
+    if(size1==8)       {temp=asc2_0806[chr1][i];} //调用0806字体
     else if(size1==12) {temp=asc2_1206[chr1][i];} //调用1206字体
     else if(size1==16) {temp=asc2_1608[chr1][i];} //调用1608字体
     else if(size1==24) {temp=asc2_2412[chr1][i];} //调用2412字体
@@ -235,11 +236,10 @@ void DrawOnMemory::showChar(uint8_t chr)
   }
 
   if(chr == '\n') {
-    x = 0;
     y += fontHeight;
     return;
   }
-  showChar(x, y, chr, font, 1);
+  showChar(x, y, chr, font, mode);
   x += fontWidth;
 }
 

@@ -3,6 +3,13 @@
 #include <stdint.h>
 #include "DrawOnMemory.h"
 
+enum  UIIndex {
+  UI_INDEX_MAIN_UI = 0,
+  UI_INDEX_WEATHER_UI,
+  UI_INDEX_SYSTEM_INFO_UI,
+  UI_INDEX_MAX
+};
+
 class UIInterface {
 public:
   UIInterface() :

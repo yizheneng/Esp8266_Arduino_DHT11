@@ -42,12 +42,18 @@ public:
     this->y = y;
     } 
 
+    // 0 反色显示 1 正常显示
+    void setDisplayMode(int val) {
+      mode = val;
+    }
+
 private:
     void setFont(const uint8_t* font, bool inverse = false);
 
     OledFont font;
     int8_t x;
     int8_t y;
+    int8_t mode;
     int8_t fontWidth;
     int8_t fontHeight;
     uint8_t* gramPtr;
