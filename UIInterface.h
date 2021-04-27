@@ -4,9 +4,11 @@
 #include "DrawOnMemory.h"
 
 enum  UIIndex {
-  UI_INDEX_MAIN_UI = 0,
-  UI_INDEX_WEATHER_UI,
-  UI_INDEX_SYSTEM_INFO_UI,
+  UI_INDEX_MAIN_UI = 0,   // 主界面（首屏）
+  UI_INDEX_WEATHER_UI,    // 天气界面
+  UI_INDEX_SYSTEM_INFO_UI,// 系统信息界面
+  UI_INDEX_MENU_WEATHER,  // 天气菜单
+  UI_INDEX_MENU_SYSTEM_INFO, // 系统信息菜单
   UI_INDEX_MAX
 };
 

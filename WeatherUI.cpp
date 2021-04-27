@@ -58,13 +58,9 @@ int8_t WeatherUI::tickOnce()
     painter.showString("Waiting...");
   }
 
-  if(buttonL.isClicked()) {
-    return UI_INDEX_MAIN_UI;
+  if(buttonC.isClicked()) {
+    return UI_INDEX_MENU_WEATHER;
   } 
-
-  if(buttonR.isClicked()) {
-    return UI_INDEX_SYSTEM_INFO_UI;
-  }
 
   return -1;
 }

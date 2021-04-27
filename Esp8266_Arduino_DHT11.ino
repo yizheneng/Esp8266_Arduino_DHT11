@@ -10,6 +10,8 @@
 #include "MainUI.h"
 #include "WeatherUI.h"
 #include "SystemInfoUI.h"
+#include "SystemInfoMenuUI.h"
+#include "WeatherMenuUI.h"
 
 DHT dht(D1, DHT11);
 SSD1306SPI oled(D6, D4, D5, D2, D3);
@@ -28,10 +30,6 @@ Button buttonL(D0);
 Button buttonC(D7);
 Button buttonR(D8);
 
-MainUI mainUI;
-WeatherUI weatherUI;
-SystemInfoUI systemInfoUI;
-
 UIInterface* uiPointers[3];
 
 void setup() {
@@ -42,9 +40,11 @@ void setup() {
   oled.begin();
   timeClient.begin();
 
-  uiPointers[UI_INDEX_MAIN_UI] = &mainUI;
-  uiPointers[UI_INDEX_WEATHER_UI] = &weatherUI;
-  uiPointers[UI_INDEX_SYSTEM_INFO_UI] = &systemInfoUI;
+  uiPointers[UI_INDEX_MAIN_UI] = new MainUI();
+  uiPointers[UI_INDEX_WEATHER_UI] = new WeatherUI();
+  uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
+  uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
+  uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
 }
 
 void loop() {
@@ -73,9 +73,10 @@ void loop() {
     }
 
 TICK_ONCE:
-    int temp = uiPointers[currentUIIndex]->tickOnce();
+    int8_t temp = uiPointers[currentUIIndex]->tickOnce();
     if(temp >= 0) {
       if(temp < UI_INDEX_MAX) {
+        Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
         currentUIIndex = temp;
         uiPointers[currentUIIndex]->enter();
         goto TICK_ONCE;

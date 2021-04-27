@@ -44,12 +44,13 @@ int8_t MainUI::tickOnce()
   painter.setXY(0, 48);
   painter.printf("TEMP:%d  HUM:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
 
-  if(buttonL.isClicked()) {
-    return UI_INDEX_SYSTEM_INFO_UI;
+  // if(buttonR.isClicked()) {
+  //   return UI_INDEX_MENU_WEATHER;
+  // }
+
+   if(buttonL.isClicked()) {
+    return UI_INDEX_MENU_SYSTEM_INFO;
   } 
 
-  if(buttonR.isClicked()) {
-    return UI_INDEX_WEATHER_UI;
-  }
   return -1;
 }

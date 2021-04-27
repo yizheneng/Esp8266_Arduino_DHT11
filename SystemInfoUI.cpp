@@ -41,13 +41,9 @@ int8_t SystemInfoUI::tickOnce()
   painter.printf("SSID:%s\r\n", WiFi.SSID().c_str());
   painter.printf("IP:%s", WiFi.localIP().toString().c_str());
 
-  if(buttonL.isClicked()) {
-    return UI_INDEX_WEATHER_UI;
+  if(buttonC.isClicked()) {
+    return UI_INDEX_MENU_SYSTEM_INFO;
   } 
-
-  if(buttonR.isClicked()) {
-    return UI_INDEX_MAIN_UI;
-  }
 
   return -1;
 }
