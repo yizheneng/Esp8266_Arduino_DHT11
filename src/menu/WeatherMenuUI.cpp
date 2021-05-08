@@ -1,9 +1,9 @@
 #include "WeatherMenuUI.h"
 #include <DHT.h>
 #include <NTPClient.h>
-#include "weather.h"
-#include "systemicon.h"
-#include "button.h"
+#include "../weather/weather.h"
+#include "../icon/systemicon.h"
+#include "../button/button.h"
 #include "SystemInfoMenuUI.h"
 
 extern DHT dht;

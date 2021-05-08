@@ -1,8 +1,8 @@
 #include "SystemInfoMenuUI.h"
 #include <DHT.h>
 #include <NTPClient.h>
-#include "systemicon.h"
-#include "button.h"
+#include "../icon/systemicon.h"
+#include "../button/button.h"
 
 extern DHT dht;
 extern NTPClient timeClient;

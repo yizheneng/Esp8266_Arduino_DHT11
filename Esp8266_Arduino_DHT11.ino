@@ -2,16 +2,16 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <NTPClient.h>
-#include "SSD1306SPI.h"
-#include "weathericon.h"
+#include "src/displayDrivers/SSD1306SPI.h"
+#include "src/icon/weathericon.h"
 //#include "badapple.h"
-#include "button.h"
-#include "weather.h"
-#include "MainUI.h"
-#include "WeatherUI.h"
-#include "SystemInfoUI.h"
-#include "SystemInfoMenuUI.h"
-#include "WeatherMenuUI.h"
+#include "src/button/button.h"
+#include "src/weather/weather.h"
+#include "src/menu/MainUI.h"
+#include "src/menu/WeatherUI.h"
+#include "src/menu/SystemInfoUI.h"
+#include "src/menu/SystemInfoMenuUI.h"
+#include "src/menu/WeatherMenuUI.h"
 
 DHT dht(D1, DHT11);
 SSD1306SPI oled(D6, D4, D2, D3);

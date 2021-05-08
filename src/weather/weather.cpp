@@ -1,5 +1,5 @@
 #include "weather.h"
-#include "weathericon.h"
+#include "../icon/weathericon.h"
 #include <Arduino_JSON.h>
 
 Weather::Weather(Client& aClient) :
