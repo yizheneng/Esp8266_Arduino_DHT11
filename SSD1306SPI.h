@@ -20,7 +20,7 @@
 class SSD1306SPI 
 {
 public:
-  SSD1306SPI(int csPin, int resPin, int dcPin, int sclkPin, int sdioPin);
+  SSD1306SPI(int csPin, int resPin, int sclkPin, int sdioPin);
 
   void begin();
 
@@ -40,7 +40,6 @@ private:
 
   int csPin;
   int resPin;
-  int dcPin;
   int sclkPin;
   int sdioPin;
 };

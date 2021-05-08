@@ -14,7 +14,7 @@
 #include "WeatherMenuUI.h"
 
 DHT dht(D1, DHT11);
-SSD1306SPI oled(D6, D4, D5, D2, D3);
+SSD1306SPI oled(D6, D4, D2, D3);
 WiFiUDP ntpUDP;
 WiFiClient weatherClient;
 NTPClient timeClient(ntpUDP, 8 * 60 * 60);
@@ -23,16 +23,17 @@ Weather weather(weatherClient);
 char ssid[] = "Cnbot-Work";
 char pass[] = "Cnbot001";
 
-char ssid1[] = "2291"; 
-char pass1[] = "2911.2911"; 
+char ssid1[] = "2291";
+char pass1[] = "2911.2911";
 
 Button buttonL(D0);
 Button buttonC(D7);
-Button buttonR(D8);
+Button buttonR(D5);
 
-UIInterface* uiPointers[3];
+UIInterface *uiPointers[UI_INDEX_MAX];
 
-void setup() {
+void setup()
+{
   // put your setup code here, to run once:
   Serial.begin(115200);
   WiFi.begin(ssid1, pass1);
@@ -47,44 +48,45 @@ void setup() {
   uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
 }
 
-void loop() {
+void loop()
+{
   int i = 0;
   int currentUIIndex = UI_INDEX_MAIN_UI;
 
-  while(1) {
-    if(WiFi.status() == WL_CONNECTED) {
+  while (1)  {
+    if (WiFi.status() == WL_CONNECTED) {
       timeClient.update();
       weather.tickOnce();
     } else {
       static bool connectFlag = false;
-      if(!connectFlag) {
+      if (!connectFlag) {
         byte numSsid = WiFi.scanNetworks();
         for (int i = 0; i < numSsid; i++) {
           Serial.println(WiFi.SSID(i));
-          if(WiFi.SSID(i) == ssid) {
+          if (WiFi.SSID(i) == ssid) {
             WiFi.begin(ssid, pass);
             connectFlag = true;
-          } else if(WiFi.SSID(i) == ssid1) {
+          } else if (WiFi.SSID(i) == ssid1) {
             WiFi.begin(ssid1, pass1);
             connectFlag = true;
           }
-        }  
+        }
       }
     }
 
-TICK_ONCE:
+  TICK_ONCE:
     int8_t temp = uiPointers[currentUIIndex]->tickOnce();
-    if(temp >= 0) {
-      if(temp < UI_INDEX_MAX) {
+    if (temp >= 0) {
+      if (temp < UI_INDEX_MAX) {
         Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
         currentUIIndex = temp;
         uiPointers[currentUIIndex]->enter();
         goto TICK_ONCE;
       }
     }
-    
+
     oled.syncDisplay(uiPointers[currentUIIndex]->getGRam());
-    
+
     delay(10);
   }
 }

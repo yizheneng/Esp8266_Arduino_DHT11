@@ -24,6 +24,7 @@ public:
   uint8_t* getGRam() {     // 获取当前页的页面缓存
     return (uint8_t*)OLED_GRAM;
   }
+  
 protected:
   uint8_t OLED_GRAM[144][8];     // 当前页面缓存
   DrawOnMemory painter;

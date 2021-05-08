@@ -31,10 +31,9 @@
 #define Scroll_128Frames              0x2
 #define Scroll_256Frames              0x3
 
-SSD1306SPI::SSD1306SPI(int csPin, int resPin, int dcPin, int sclkPin, int sdioPin) :
+SSD1306SPI::SSD1306SPI(int csPin, int resPin, int sclkPin, int sdioPin) :
   csPin(csPin),
   resPin(resPin),
-  dcPin(dcPin),
   sclkPin(sclkPin),
   sdioPin(sdioPin)
 {
@@ -45,13 +44,11 @@ void SSD1306SPI::begin()
 {
   pinMode(csPin, OUTPUT);
   pinMode(resPin, OUTPUT);
-  pinMode(dcPin, OUTPUT);
   pinMode(sclkPin, OUTPUT);
   pinMode(sdioPin, OUTPUT);
 
   digitalWrite(csPin, HIGH);
   digitalWrite(resPin, HIGH);
-  digitalWrite(dcPin, HIGH);
   digitalWrite(sclkPin, HIGH);
   digitalWrite(sdioPin, HIGH);
   init();
@@ -59,18 +56,18 @@ void SSD1306SPI::begin()
 
 void SSD1306SPI::write(int8_t data, bool isData)
 {
-  digitalWrite(dcPin, isData ? HIGH : LOW);
   digitalWrite(csPin, LOW);
+  // DC 3-wire SPI
+  digitalWrite(sclkPin, LOW);
+  digitalWrite(sdioPin, isData ? HIGH : LOW);
+  digitalWrite(sclkPin, HIGH);
   for(int i = 0; i < 8; i ++) {
       digitalWrite(sclkPin, LOW);
-      //delay(1);
       digitalWrite(sdioPin, (data & 0x80) > 0 ? HIGH : LOW);
       digitalWrite(sclkPin, HIGH);
-      //delay(1);
       data <<= 1;
   }
   digitalWrite(csPin, HIGH);
-  digitalWrite(dcPin, HIGH);
 }
 
 void SSD1306SPI::sendCommand(int8_t cmd)

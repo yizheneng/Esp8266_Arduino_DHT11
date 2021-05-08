@@ -36,9 +36,9 @@ int8_t SystemInfoMenuUI::tickOnce()
     return UI_INDEX_MENU_WEATHER;
   }
 
-  // if(buttonR.isClicked()) {
-  //   return UI_INDEX_MAIN_UI;
-  // }
+  if(buttonR.isClicked()) {
+    return UI_INDEX_MAIN_UI;
+  }
 
   return -1;
 }
