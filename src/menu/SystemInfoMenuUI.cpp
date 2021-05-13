@@ -1,15 +1,9 @@
 #include "SystemInfoMenuUI.h"
-#include <DHT.h>
-#include <NTPClient.h>
 #include "../icon/systemicon.h"
 #include "../button/button.h"
-
-extern DHT dht;
-extern NTPClient timeClient;
 extern Button buttonL;
 extern Button buttonC;
 extern Button buttonR;
-
 
 // 主界面
 SystemInfoMenuUI::SystemInfoMenuUI() :
