@@ -31,7 +31,7 @@ int8_t SystemInfoMenuUI::tickOnce()
   }
 
   if(buttonR.isClicked()) {
-    return UI_INDEX_MAIN_UI;
+    return UI_INDEX_MENU_SETTINGS_UI;
   }
 
   return -1;

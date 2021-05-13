@@ -49,7 +49,7 @@ int8_t MainUI::tickOnce()
   }
 
    if(buttonL.isClicked()) {
-    return UI_INDEX_MENU_SYSTEM_INFO;
+    return UI_INDEX_MENU_SETTINGS_UI;
   } 
 
   return -1;

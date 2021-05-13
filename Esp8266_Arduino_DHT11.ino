@@ -12,6 +12,8 @@
 #include "src/menu/SystemInfoUI.h"
 #include "src/menu/SystemInfoMenuUI.h"
 #include "src/menu/WeatherMenuUI.h"
+#include "src/menu/SettingsMenuUI.h"
+#include "src/menu/SettingsUI.h"
 
 DHT dht(D1, DHT11);
 SSD1306SPI oled(D6, D4, D2, D3);
@@ -46,6 +48,8 @@ void setup()
   uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
   uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
   uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
+  uiPointers[UI_INDEX_MENU_SETTINGS_UI] = new SettingsMenuUI();
+  uiPointers[UI_INDEX_SETTINGS_UI] = new SettingsUI();
 }
 
 void loop()
