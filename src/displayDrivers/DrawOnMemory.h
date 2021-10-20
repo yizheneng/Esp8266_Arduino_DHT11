@@ -19,6 +19,10 @@ public:
 
     void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t mode);
 
+    void drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t isFull);
+
+    void drawProcessBar(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t per);
+
     void showChar(uint8_t x, uint8_t y, uint8_t chr, uint8_t size1, uint8_t mode);
 
     void showChar(uint8_t chr);

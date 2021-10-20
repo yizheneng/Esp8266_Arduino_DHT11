@@ -16,7 +16,7 @@
 #include "src/menu/SettingsUI.h"
 
 DHT dht(D1, DHT11);
-SSD1306SPI oled(D6, D4, D2, D3);
+SSD1306SPI oled(D6, D4, D2, D0);
 WiFiUDP ntpUDP;
 WiFiClient weatherClient;
 NTPClient timeClient(ntpUDP, 8 * 60 * 60);
@@ -28,9 +28,10 @@ char pass[] = "Cnbot001";
 char ssid1[] = "2291";
 char pass1[] = "2911.2911";
 
-Button buttonL(D0);
+Button buttonL(D6);
 Button buttonC(D7);
 Button buttonR(D5);
+Button buttonUser(D3);
 
 UIInterface *uiPointers[UI_INDEX_MAX];
 
@@ -80,7 +81,7 @@ void loop()
 
   TICK_ONCE:
     int8_t temp = uiPointers[currentUIIndex]->tickOnce();
-    if (temp >= 0) {
+    if (temp >= 0) { // 大于0需要切换界面
       if (temp < UI_INDEX_MAX) {
         Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
         currentUIIndex = temp;

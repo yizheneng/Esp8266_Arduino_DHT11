@@ -4,6 +4,7 @@
 extern Button buttonL;
 extern Button buttonC;
 extern Button buttonR;
+extern Button buttonUser;
 
 // 主界面
 SettingsMenuUI::SettingsMenuUI() :
@@ -24,16 +25,14 @@ void SettingsMenuUI::enter()
 
 int8_t SettingsMenuUI::tickOnce()
 {
-  if(buttonC.isClicked()) {
-    return UI_INDEX_SETTINGS_UI;
-  }
-
-  if(buttonL.isClicked()) {
-    return UI_INDEX_MENU_SYSTEM_INFO;
-  }
-
-  if(buttonR.isClicked()) {
+  switch (buttonUser.pressStatus())
+  {
+  case PRESS_STATUS_SHORT_PRESS:
     return UI_INDEX_MAIN_UI;
+    break;
+  case PRESS_STATUS_LONG_PRESS:
+    return UI_INDEX_MENU_SYSTEM_INFO;
+    break;
   }
 
   return -1;

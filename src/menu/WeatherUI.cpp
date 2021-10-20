@@ -8,9 +8,7 @@
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
-extern Button buttonL;
-extern Button buttonC;
-extern Button buttonR;
+extern Button buttonUser;
 
 
 // 主界面
@@ -57,10 +55,13 @@ int8_t WeatherUI::tickOnce()
     painter.setFontSize(OLED_FONT_24X12);
     painter.showString("Waiting...");
   }
-
-  if(buttonC.isClicked()) {
+  
+  switch (buttonUser.pressStatus())
+  {
+  case PRESS_STATUS_SHORT_PRESS:
     return UI_INDEX_MENU_WEATHER;
-  } 
+    break;
+  }
 
   return -1;
 }

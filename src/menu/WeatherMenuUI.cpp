@@ -12,7 +12,7 @@ extern Weather weather;
 extern Button buttonL;
 extern Button buttonC;
 extern Button buttonR;
-
+extern Button buttonUser;
 
 // 天气菜单
 WeatherMenuUI::WeatherMenuUI() :
@@ -42,5 +42,16 @@ int8_t WeatherMenuUI::tickOnce()
   if(buttonC.isClicked()) {
     return UI_INDEX_WEATHER_UI;
   } 
+
+  switch (buttonUser.pressStatus())
+  {
+  case PRESS_STATUS_SHORT_PRESS:
+    return UI_INDEX_MENU_SYSTEM_INFO;
+    break;
+  case PRESS_STATUS_LONG_PRESS:
+    return UI_INDEX_WEATHER_UI;
+    break;
+  }
+
   return -1;
 }

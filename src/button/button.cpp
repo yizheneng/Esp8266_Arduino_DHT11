@@ -25,7 +25,7 @@ bool Button::isClicked()
   }
 
   if(result && lastResult) {
-    if((millis() - lastReadTime) < 300) {
+    if((millis() - lastReadTime) < 300) { // 小于300ms认为是抖动
       return false;
     } else {
       lastReadTime = millis ();
@@ -36,4 +36,29 @@ bool Button::isClicked()
 
   lastResult = false;
   return false;
+}
+
+PressStatus Button::pressStatus() {
+  bool result = isPressed();
+
+  if(result) {
+    if(!lastResult) {
+      lastReadTime = millis ();
+      lastResult = true;
+    }
+    return PRESS_STATUS_PRESSING;
+  } else {
+    if(lastResult) {
+      if((millis() - lastReadTime) < 300) { // 小于300ms认为是抖动
+        return PRESS_STATUS_PRESSING;
+      } else if((millis() - lastReadTime) > 1000) {
+        lastResult = false;
+        return PRESS_STATUS_LONG_PRESS;
+      } else {
+        lastResult = false;
+        return PRESS_STATUS_SHORT_PRESS;
+      }
+    }
+    return PRESS_STATUS_NO_PRESS;
+  }
 }

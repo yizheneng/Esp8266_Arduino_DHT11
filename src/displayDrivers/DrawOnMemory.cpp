@@ -36,6 +36,33 @@ void DrawOnMemory::drawPoint(uint8_t x,uint8_t y,uint8_t t)
   }
 }
 
+void DrawOnMemory::drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t isFull)
+{
+  this->mode = mode;
+  if(isFull) {
+    for(int i = 0; i <= h; i ++) {
+      drawLine(x, y + i, x + w, y + i, mode);
+    }
+  } else {
+    drawLine(x, y, x + w, y, mode);
+    drawLine(x + w, y, x + w, y + h, mode);
+    drawLine(x, y, x, y + h, mode);
+    drawLine(x, y + h, x + w, y + h, mode);
+  }
+}
+
+void DrawOnMemory::drawProcessBar(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t per)
+{
+  drawRect(x, y, w, h, mode, false);
+
+  if(per >= 100) {
+    per = 100;
+  }
+
+  uint16_t tempW = (w - 4) * per / 100;
+  drawRect(x + 2, y + 2, tempW, h - 4, mode, true);
+}
+
 //x,y:圆心坐标
 //r:圆的半径
 void DrawOnMemory::drawCircle(uint8_t x,uint8_t y,uint8_t r)
