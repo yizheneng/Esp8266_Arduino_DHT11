@@ -1,16 +1,16 @@
 #include "DrawOnMemory.h"
-#include "oledfont.h"
+#include "font/ascii_font.h"
 #include <Arduino.h>
 #define DRAW_MAX_X 128
 #define DRAW_MAX_Y 64
 
 DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
     gramPtr(gramPtr),
-    font(OLED_FONT_8X6),
     x(0),
     y(0),
     fontWidth(6),
     fontHeight(8),
+    fontPtr((uint8_t*)asc2_0806),
     mode(1)
 {
 
@@ -128,19 +128,17 @@ void DrawOnMemory::drawLine(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t 
 //y:0~63
 //size1:选择字体 6x8/6x12/8x16/12x24
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t size1,uint8_t mode)
+void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t mode)
 {
   uint8_t i,m,temp,size2,chr1;
   uint8_t x0=x,y0=y;
-  if(size1==8)size2=6;
-  else size2=(size1/8+((size1%8)?1:0))*(size1/2);  //得到字体一个字符对应点阵集所占的字节数
+  if(fontHeight==8)
+    size2=6;
+  else 
+    size2=(fontHeight/8+((fontHeight%8)?1:0))*(fontHeight/2);  //得到字体一个字符对应点阵集所占的字节数
   chr1=chr-' ';  //计算偏移后的值
   for(i=0;i<size2;i++) {
-    if(size1==8)       {temp=asc2_0806[chr1][i];} //调用0806字体
-    else if(size1==12) {temp=asc2_1206[chr1][i];} //调用1206字体
-    else if(size1==16) {temp=asc2_1608[chr1][i];} //调用1608字体
-    else if(size1==24) {temp=asc2_2412[chr1][i];} //调用2412字体
-    else return;
+    temp=fontPtr[chr1*size2 + i]; //调用0806字体
     for(m=0;m<8;m++) {
       if(temp&0x01) drawPoint(x,y,mode);
       else drawPoint(x,y,!mode);
@@ -148,7 +146,7 @@ void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t size1,uint8_
       y++;
     }
     x++;
-    if((size1!=8)&&((x-x0)==size1/2)) {x=x0;y0=y0+8;}
+    if((fontHeight!=8)&&((x-x0)==fontHeight/2)) {x=x0;y0=y0+8;}
     y=y0;
   }
 }
@@ -158,12 +156,11 @@ void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t size1,uint8_
 //size1:字体大小 
 //*chr:字符串起始地址 
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t size1,uint8_t mode)
+void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t mode)
 {
   while((*chr>=' ')&&(*chr<='~')) {
-    showChar(x,y,*chr,size1,mode);
-    if(size1==8)x+=6;
-    else x+=size1/2;
+    showChar(x,y,*chr,mode);
+    x += fontWidth;
     chr++;
   }
 }
@@ -215,26 +212,31 @@ void DrawOnMemory::clearDisplay()
   }
 }
 
-void DrawOnMemory::setFontSize(const OledFont font)
+void DrawOnMemory::setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h)
 {
-  this->font = font;
-  switch (font) {
-    case OLED_FONT_8X6:
-      fontWidth = 6;
-      fontHeight = 8;
-      break;
-    case OLED_FONT_12X6:
-      fontWidth = 6;
-      fontHeight = 12;
-      break;
-    case OLED_FONT_16X8:
-      fontWidth = 8;
-      fontHeight = 16;
-      break;
-    case OLED_FONT_24X12:
-      fontWidth = 12;
-      fontHeight = 24;
-      break;
+  this->fontPtr = fontPtr;
+  this->fontWidth = w;
+  this->fontHeight = h;
+}
+
+void DrawOnMemory::setFontSize(OledFont font)
+{
+  switch (font)
+  {
+  case OLED_FONT_8X6:
+    setFont((uint8_t*)asc2_0806, 6, 8);
+    break;
+  case OLED_FONT_12X6:
+    setFont((uint8_t*)asc2_1206, 6, 12);
+    break;
+  case OLED_FONT_16X8:
+    setFont((uint8_t*)asc2_1608, 8, 16);
+    break;
+  case OLED_FONT_24X12:
+    setFont((uint8_t*)asc2_2412, 12, 24);
+    break;
+  default:
+    break;
   }
 }
 
@@ -266,7 +268,7 @@ void DrawOnMemory::showChar(uint8_t chr)
     y += fontHeight;
     return;
   }
-  showChar(x, y, chr, font, mode);
+  showChar(x, y, chr, mode);
   x += fontWidth;
 }
 

@@ -25,9 +25,6 @@ void MainUI::enter()
   
 }
 
-static const uint8_t MONS[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};//平年
-static const uint8_t LEAPMONS[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};//闰年
-
 int8_t MainUI::tickOnce()
 {
   if(weather.isUpdated()) {

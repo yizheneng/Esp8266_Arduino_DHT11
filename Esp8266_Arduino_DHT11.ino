@@ -60,8 +60,14 @@ void loop()
 
   while (1)  {
     if (WiFi.status() == WL_CONNECTED) {
-      timeClient.update();
-      weather.tickOnce();
+      static int count5S = 500;
+      if(count5S > 100) {
+        count5S = 0;
+        timeClient.update();
+        weather.tickOnce();
+      }
+
+      count5S ++;
     } else {
       static bool connectFlag = false;
       if (!connectFlag) {

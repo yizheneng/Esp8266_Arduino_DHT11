@@ -23,11 +23,11 @@ public:
 
     void drawProcessBar(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t per);
 
-    void showChar(uint8_t x, uint8_t y, uint8_t chr, uint8_t size1, uint8_t mode);
+    void showChar(uint8_t x, uint8_t y, uint8_t chr, uint8_t mode);
 
     void showChar(uint8_t chr);
 
-    void showString(uint8_t x, uint8_t y, const char* chr, uint8_t size1, uint8_t mode);
+    void showString(uint8_t x, uint8_t y, const char* chr, uint8_t mode);
 
     void showString(const char* chr);
 
@@ -35,7 +35,9 @@ public:
 
     void showPictureInFlash(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data);
 
-    void setFontSize(const OledFont font);
+    void setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h);
+
+    void setFontSize(OledFont font);
 
     void clearDisplay();
 
@@ -52,12 +54,11 @@ public:
     }
 
 private:
-    void setFont(const uint8_t* font, bool inverse = false);
-
-    OledFont font;
     int8_t x;
     int8_t y;
     int8_t mode;
+
+    const uint8_t* fontPtr;
     int8_t fontWidth;
     int8_t fontHeight;
     uint8_t* gramPtr;
