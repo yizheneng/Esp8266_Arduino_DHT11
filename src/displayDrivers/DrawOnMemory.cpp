@@ -193,16 +193,19 @@ uint16_t Utf8ToUnicode(uint8_t* buf, uint8_t*& nextPtr) {
     if(!(buf[0] & 0x80)) {
         nextPtr = buf + 1;
         result = buf[0];
+        return result;
     }
 
     if(!(buf[0] & 0x20)) {
         nextPtr = buf + 2;
         result = (buf[0] << 11 & 0xf800) | (buf[1] & 0x3F);
+        return result;
     }
 
     if(!(buf[0] & 0x10)) {
         nextPtr = buf + 3;
         result = (buf[0] << 12 & 0xf000) | (buf[1] << 6 & 0xfc0) | (buf[2] & 0x3F);
+        return result;
     }
 
     return result;
@@ -220,6 +223,7 @@ void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t mode)
     uint16_t code = 0;
     while (next[0]) {
       code = Utf8ToUnicode(next, next);
+      Serial.printf("%4x ", code);
       showChar(x,y,code,mode);
       if(code <= 0x7F) {
         x += fontWidth/2; // 英文字符的宽度是中文的一半

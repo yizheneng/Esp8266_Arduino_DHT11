@@ -50,9 +50,12 @@ int8_t MainUI::tickOnce()
   
   painter.setFont((uint8_t*)FONT_SSERIFF, 16, 16, true);
   painter.setXY(0, 32);
-  painter.printf("LOW:%d  HIGH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
+  // painter.printf("LOW:%d  HIGH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
+  // painter.setXY(0, 48);
+  // painter.printf("TEMP:%d  HUM:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
+  painter.printf("低:%d 高:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
   painter.setXY(0, 48);
-  painter.printf("TEMP:%d  HUM:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
+  painter.printf("温:%d 湿:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
 
   switch (buttonUser.pressStatus())
   {
