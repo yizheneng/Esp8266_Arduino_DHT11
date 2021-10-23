@@ -1,11 +1,11 @@
 #ifndef _DRAW_ON_MEMORY_H_
 #define _DRAW_ON_MEMORY_H_
 #include <stdint.h>
-enum OledFont {
+enum OledFont { // 这些字库内不含ASCII码以外的字符
   OLED_FONT_8X6 = 8,
   OLED_FONT_12X6 = 12,
   OLED_FONT_16X8 = 16,
-  OLED_FONT_24X12 = 24,
+  OLED_FONT_24X12 = 24, 
 };
 
 class DrawOnMemory
@@ -23,7 +23,7 @@ public:
 
     void drawProcessBar(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t per);
 
-    void showChar(uint8_t x, uint8_t y, uint8_t chr, uint8_t mode);
+    void showChar(uint8_t x, uint8_t y, uint16_t chr, uint8_t mode);
 
     void showChar(uint8_t chr);
 
@@ -35,7 +35,7 @@ public:
 
     void showPictureInFlash(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data);
 
-    void setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h);
+    void setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h, bool isFontInFlash);
 
     void setFontSize(OledFont font);
 
@@ -61,6 +61,8 @@ private:
     const uint8_t* fontPtr;
     int8_t fontWidth;
     int8_t fontHeight;
+    bool isFontInFlash;
+
     uint8_t* gramPtr;
 };
 

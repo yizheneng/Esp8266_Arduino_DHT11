@@ -10,6 +10,7 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
     y(0),
     fontWidth(6),
     fontHeight(8),
+    isFontInFlash(false),
     fontPtr((uint8_t*)asc2_0806),
     mode(1)
 {
@@ -128,27 +129,83 @@ void DrawOnMemory::drawLine(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t 
 //y:0~63
 //size1:选择字体 6x8/6x12/8x16/12x24
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t mode)
+void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint16_t chr,uint8_t mode)
 {
-  uint8_t i,m,temp,size2,chr1;
+  uint8_t i,m,temp,chr1;
   uint8_t x0=x,y0=y;
-  if(fontHeight==8)
-    size2=6;
-  else 
-    size2=(fontHeight/8+((fontHeight%8)?1:0))*(fontHeight/2);  //得到字体一个字符对应点阵集所占的字节数
-  chr1=chr-' ';  //计算偏移后的值
-  for(i=0;i<size2;i++) {
-    temp=fontPtr[chr1*size2 + i]; //调用0806字体
-    for(m=0;m<8;m++) {
-      if(temp&0x01) drawPoint(x,y,mode);
-      else drawPoint(x,y,!mode);
-      temp>>=1;
-      y++;
+  
+  if(isFontInFlash) {
+    int tempFontWidth = fontWidth;
+    if(chr < 0x7F) {
+      tempFontWidth = fontWidth/2;
     }
-    x++;
-    if((fontHeight!=8)&&((x-x0)==fontHeight/2)) {x=x0;y0=y0+8;}
-    y=y0;
+
+    int byteSize = fontHeight*tempFontWidth/8;
+    uint8_t* tempData = (uint8_t*)calloc(byteSize, sizeof(char));
+    if(chr <= 0x7F) {
+      memcpy(tempData, fontPtr + chr*byteSize, byteSize);
+    } else {
+      chr = chr - 0x4E00;
+      memcpy(tempData, fontPtr + chr*byteSize + 128 * 16, byteSize);
+    }
+    
+    for(int i=0; i < byteSize; i++) {
+      temp = tempData[i];
+      for(m=0;m<8;m++) {
+        if(temp&0x01) drawPoint(x,y,mode);
+        else drawPoint(x,y,!mode);
+        temp>>=1;
+        y++;
+      }
+      x++;
+      if((x-x0)%tempFontWidth == 0) {
+        x = x0;
+        y0 = y0+8;
+      }
+      y=y0;
+    }
+    free(tempData);
+  } else {
+     int byteSize = 0;
+     if(fontHeight==8)
+      byteSize=6;
+    else 
+      byteSize=(fontHeight/8+((fontHeight%8)?1:0))*(fontHeight/2);  //得到字体一个字符对应点阵集所占的字节数
+    chr1=chr-' ';  //计算偏移后的值
+    for(i=0;i<byteSize;i++) {
+      temp=fontPtr[chr1*byteSize + i]; //调用0806字体
+      for(m=0;m<8;m++) {
+        if(temp&0x01) drawPoint(x,y,mode);
+        else drawPoint(x,y,!mode);
+        temp>>=1;
+        y++;
+      }
+      x++;
+      if((fontHeight!=8)&&((x-x0)==fontHeight/2)) {x=x0;y0=y0+8;}
+      y=y0;
+    }
   }
+  
+}
+
+uint16_t Utf8ToUnicode(uint8_t* buf, uint8_t*& nextPtr) {
+    uint16_t result = 0;
+    if(!(buf[0] & 0x80)) {
+        nextPtr = buf + 1;
+        result = buf[0];
+    }
+
+    if(!(buf[0] & 0x20)) {
+        nextPtr = buf + 2;
+        result = (buf[0] << 11 & 0xf800) | (buf[1] & 0x3F);
+    }
+
+    if(!(buf[0] & 0x10)) {
+        nextPtr = buf + 3;
+        result = (buf[0] << 12 & 0xf000) | (buf[1] << 6 & 0xfc0) | (buf[2] & 0x3F);
+    }
+
+    return result;
 }
 
 //显示字符串
@@ -158,10 +215,24 @@ void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t mode)
 //mode:0,反色显示;1,正常显示
 void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t mode)
 {
-  while((*chr>=' ')&&(*chr<='~')) {
-    showChar(x,y,*chr,mode);
-    x += fontWidth;
-    chr++;
+  if(isFontInFlash) {
+    uint8_t* next = (uint8_t*)chr;
+    uint16_t code = 0;
+    while (next[0]) {
+      code = Utf8ToUnicode(next, next);
+      showChar(x,y,code,mode);
+      if(code <= 0x7F) {
+        x += fontWidth/2; // 英文字符的宽度是中文的一半
+      } else {
+        x += fontWidth;
+      }
+    }
+  } else {
+    while((*chr>=' ')&&(*chr<='~')) {
+      showChar(x,y,*chr,mode);
+      x += fontWidth;
+      chr++;
+    }
   }
 }
 
@@ -212,11 +283,12 @@ void DrawOnMemory::clearDisplay()
   }
 }
 
-void DrawOnMemory::setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h)
+void DrawOnMemory::setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h, bool isFontInFlash)
 {
   this->fontPtr = fontPtr;
   this->fontWidth = w;
   this->fontHeight = h;
+  this->isFontInFlash = isFontInFlash;
 }
 
 void DrawOnMemory::setFontSize(OledFont font)
@@ -224,16 +296,16 @@ void DrawOnMemory::setFontSize(OledFont font)
   switch (font)
   {
   case OLED_FONT_8X6:
-    setFont((uint8_t*)asc2_0806, 6, 8);
+    setFont((uint8_t*)asc2_0806, 6, 8, false);
     break;
   case OLED_FONT_12X6:
-    setFont((uint8_t*)asc2_1206, 6, 12);
+    setFont((uint8_t*)asc2_1206, 6, 12, false);
     break;
   case OLED_FONT_16X8:
-    setFont((uint8_t*)asc2_1608, 8, 16);
+    setFont((uint8_t*)asc2_1608, 8, 16, false);
     break;
   case OLED_FONT_24X12:
-    setFont((uint8_t*)asc2_2412, 12, 24);
+    setFont((uint8_t*)asc2_2412, 12, 24, false);
     break;
   default:
     break;
@@ -242,10 +314,7 @@ void DrawOnMemory::setFontSize(OledFont font)
 
 void DrawOnMemory::showString(const char* chr)
 {
-  while(((*chr>=' ') && (*chr<='~')) || (*chr == '\r') ||  (*chr == '\n')) {
-    showChar(*chr);
-    chr++;
-  }
+  showString(x,y,chr,mode);
 }
 
 void DrawOnMemory::showChar(uint8_t chr)

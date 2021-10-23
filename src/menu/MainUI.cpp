@@ -5,6 +5,7 @@
 #include "../weather/weather.h"
 #include "../icon/weathericon.h"
 #include "../button/button.h"
+#include "../displayDrivers/font/sseriff.h"
 
 extern DHT dht;
 extern NTPClient timeClient;
@@ -42,10 +43,12 @@ int8_t MainUI::tickOnce()
   
   painter.setFontSize(OLED_FONT_16X8);
   painter.setXY(32, 0);
-  painter.printf("  %02d:%02d:%02d", info->tm_hour, info->tm_min, info->tm_sec);
+  painter.printf("  %02d:%02d:%02d", info->tm_hour, info->tm_min, info->tm_sec);            // 时间显示
   painter.setXY(32, 16);
-
-  painter.printf(" %04d-%02d-%02d", info->tm_year + 1900, info->tm_mon + 1, info->tm_mday);
+  painter.printf(" %04d-%02d-%02d", info->tm_year + 1900, info->tm_mon + 1, info->tm_mday); // 温度显示
+  
+  
+  painter.setFont((uint8_t*)FONT_SSERIFF, 16, 16, true);
   painter.setXY(0, 32);
   painter.printf("LOW:%d  HIGH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
   painter.setXY(0, 48);
