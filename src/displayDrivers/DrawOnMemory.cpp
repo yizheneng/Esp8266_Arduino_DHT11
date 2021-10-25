@@ -24,6 +24,10 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
 void DrawOnMemory::drawPoint(uint8_t x,uint8_t y,uint8_t t)
 {
   uint8_t i,m,n;
+  if((x >= DRAW_MAX_X) || (y >= DRAW_MAX_Y)) {
+    return;
+  }
+
   i=y/8;
   m=y%8;
   n=1<<m;
@@ -223,7 +227,6 @@ void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t mode)
     uint16_t code = 0;
     while (next[0]) {
       code = Utf8ToUnicode(next, next);
-      Serial.printf("%4x ", code);
       showChar(x,y,code,mode);
       if(code <= 0x7F) {
         x += fontWidth/2; // 英文字符的宽度是中文的一半
