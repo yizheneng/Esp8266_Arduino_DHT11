@@ -15,6 +15,28 @@
 #include "src/menu/SettingsMenuUI.h"
 #include "src/menu/SettingsUI.h"
 
+/**
+ * TODO List:
+ * 1.每天重要新闻推送
+ * 2.点阵显示界面框架
+ *   1) KWidget基类
+ *      方法:paint 调用时更新控件绘图
+ *           event 接收键盘等事件
+ *           addChild 添加子控件
+ *   2）KLabel  类 显示文字
+ *   3）KButton 类 点击产生事件
+ *   4）KImage  类 显示图片（点阵图片）
+ *   5）KLineEdit 类 编辑单行文本
+ *   6）KSpinBox  类 编辑整数
+ *   7) KDoubleSpinBox 类 编辑浮点数
+ *   8）KTextEdit 类 编辑多行文本
+ *   9) KListSelect 类 列表选择控件
+ *   10) KProcess   类 进度条显示控件
+ *   11) KChooseBox 类 选择显示控件
+ * 3.天气界面根据日出日落时间来进行图标切换
+ * 
+*/
+
 DHT dht(D1, DHT11);
 SSD1306SPI oled(D6, D4, D2, D0);
 WiFiUDP ntpUDP;
