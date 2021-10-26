@@ -43,6 +43,7 @@ WiFiUDP ntpUDP;
 WiFiClient weatherClient;
 NTPClient timeClient(ntpUDP, 8 * 60 * 60);
 Weather weather(weatherClient);
+uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 
 char ssid[] = "Cnbot-Work";
 char pass[] = "Cnbot001";
@@ -66,7 +67,7 @@ void setup()
   oled.begin();
   timeClient.begin();
 
-  uiPointers[UI_INDEX_MAIN_UI] = new MainUI();
+  // uiPointers[UI_INDEX_MAIN_UI] = new MainUI();
   uiPointers[UI_INDEX_WEATHER_UI] = new WeatherUI();
   uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
   uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
@@ -79,6 +80,7 @@ void loop()
 {
   int i = 0;
   int currentUIIndex = UI_INDEX_MAIN_UI;
+  MainUI* mainUI = new MainUI();
 
   while (1)  {
     if (WiFi.status() == WL_CONNECTED) {
@@ -108,17 +110,18 @@ void loop()
     }
 
   TICK_ONCE:
-    int8_t temp = uiPointers[currentUIIndex]->tickOnce();
-    if (temp >= 0) { // 大于0需要切换界面
-      if (temp < UI_INDEX_MAX) {
-        Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
-        currentUIIndex = temp;
-        uiPointers[currentUIIndex]->enter();
-        goto TICK_ONCE;
-      }
-    }
+    // int8_t temp = uiPointers[currentUIIndex]->tickOnce();
+    // if (temp >= 0) { // 大于0需要切换界面
+    //   if (temp < UI_INDEX_MAX) {
+    //     Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
+    //     currentUIIndex = temp;
+    //     uiPointers[currentUIIndex]->enter();
+    //     goto TICK_ONCE;
+    //   }
+    // }
 
-    oled.syncDisplay(uiPointers[currentUIIndex]->getGRam());
+    mainUI->tickOnce();
+    oled.syncDisplay((uint8_t*)OLED_GRAM);
 
     delay(10);
   }

@@ -2,7 +2,7 @@
 #include "../displayDrivers/font/ascii_font.h"
 #include "../displayDrivers/font/sseriff.h"
 
-KLabel::KLabel(std::string text, int x, int y, int w, int h) :
+KLabel::KLabel(std::string text, uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     KWidget(x, y, w, h),
     text(text)
 {
@@ -13,36 +13,17 @@ KLabel::~KLabel()
 {
 }
 
-void KLabel::setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h, bool isFontInFlash)
+void KLabel::setText(std::string text)
 {
-    this->fontPtr = fontPtr;
-    this->fontWidth = w;
-    this->fontHeight = h;
-    this->isFontInFlash = isFontInFlash;
+    this->text = text;
 }
 
-void KLabel::setFontSize(OledFont font)
+std::string KLabel::getText()
 {
-    switch (font) {
-    case OLED_FONT_8X6:
-        setFont((uint8_t*)asc2_0806, 6, 8, false);
-        break;
-    case OLED_FONT_12X6:
-        setFont((uint8_t*)asc2_1206, 6, 12, false);
-        break;
-    case OLED_FONT_16X8:
-        setFont((uint8_t*)asc2_1608, 8, 16, false);
-        break;
-    case OLED_FONT_24X12:
-        setFont((uint8_t*)asc2_2412, 12, 24, false);
-        break;
-    default:
-        break;  
-    }
+    return text;
 }
 
-void KLabel::paint(DrawOnMemory& painter)
+void KLabel::paint()
 {
-    painter.setFont(fontPtr, fontWidth, fontHeight, isFontInFlash);
-    painter.showString(x, y, text.c_str(), true);
+    this->showString(x, y, text.c_str(), 1);
 }

@@ -1,13 +1,17 @@
 #include "KWidget.h"
+#include <string.h>
 
-KWidget::KWidget(int x, int y, int w, int h) :
+extern uint8_t OLED_GRAM[144][8];
+
+KWidget::KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
+    DrawOnMemory((uint8_t*)OLED_GRAM),
     isVisible(true),
     x(x),
     y(y),
     w(w),
     h(h)
 {
-    memset(childs, 0, sizeof(childs));
+    bzero(childs, sizeof(childs));
 }
 
 KWidget::~KWidget()
@@ -24,6 +28,7 @@ void KWidget::addChild(KWidget* child)
     for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
         if(childs[i] == 0) {
             childs[i] = child;
+            return;
         }
     }
 }
@@ -33,7 +38,7 @@ int KWidget::event(const KEvent&)
     return 0;
 }
 
-void KWidget::paint(DrawOnMemory& painter)
+void KWidget::paint()
 {
     if(!isVisible) {
         return;
@@ -41,7 +46,7 @@ void KWidget::paint(DrawOnMemory& painter)
 
     for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
         if((childs[i] != 0) && childs[i]->isVisible) {
-            childs[i]->paint(painter);
+            childs[i]->paint();
         }
     }
 }

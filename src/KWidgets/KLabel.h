@@ -6,22 +6,18 @@
 class KLabel : public KWidget
 {
 public:
-    KLabel(std::string text, int x, int y, int w, int h);
+    KLabel(std::string text, uint8_t x, uint8_t y, uint8_t w, uint8_t h);
     ~KLabel();
 
-    void setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h, bool isFontInFlash);
+    void setText(std::string text);
 
-    void setFontSize(OledFont font);
+    std::string getText();
 
 protected:
-    void paint(DrawOnMemory& painter);
+    void paint();
 
 private:
     std::string text;
-    const uint8_t* fontPtr;
-    uint8_t fontWidth;
-    uint8_t fontHeight;
-    bool isFontInFlash;
 };
 
 #endif

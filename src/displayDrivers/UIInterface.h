@@ -14,6 +14,8 @@ enum  UIIndex {
   UI_INDEX_MAX
 };
 
+extern uint8_t OLED_GRAM[144][8];
+
 class UIInterface {
 public:
   UIInterface() :
@@ -28,7 +30,6 @@ public:
   }
   
 protected:
-  uint8_t OLED_GRAM[144][8];     // 当前页面缓存
   DrawOnMemory painter;
 };
 

@@ -4,14 +4,14 @@
 #include "../displayDrivers/DrawOnMemory.h"
 #define K_WIDGET_MAX_CHILD_NUM 10
 
-class KWidget
+class KWidget : public DrawOnMemory
 {
 public:
     /**
      * x,y,w,h is in screen coord
      * w,h is now invalid
     */
-    KWidget(int x, int y, int w, int h);
+    KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h);
     ~KWidget();
 
     void addChild(KWidget*);
@@ -19,14 +19,15 @@ public:
     void removeChild(KWidget*);
 
     void setVisible(bool isVisible);
+
 protected:
     virtual int event(const KEvent&);
 
-    virtual void paint(DrawOnMemory& painter);
+    virtual void paint();
 
     bool isVisible;
 
-    int x, y, w, h;
+    uint8_t x, y, w, h;
 private:
     KWidget* childs[K_WIDGET_MAX_CHILD_NUM];
 };

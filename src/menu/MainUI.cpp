@@ -6,6 +6,7 @@
 #include "../icon/weathericon.h"
 #include "../button/button.h"
 #include "../displayDrivers/font/sseriff.h"
+#include "../displayDrivers/UIInterface.h"
 
 extern DHT dht;
 extern NTPClient timeClient;
@@ -17,8 +18,29 @@ extern Button buttonUser;
 
 // 主界面
 MainUI::MainUI() :
-  UIInterface()
+  KWidget(0, 0, 128, 64)
 {
+  timeLabel = new KLabel("00:00:00",   48, 0, 8*16, 16);
+  dateLabel = new KLabel("1990-00-00", 40, 16, 8*16, 16);
+ 
+  this->addChild(timeLabel);
+  this->addChild(dateLabel);
+
+  this->addChild(new KLabel("低:", 0, 32, 16*2, 16));
+  lowTempLabel = new KLabel("00", 24, 32, 2*16, 16);
+  this->addChild(lowTempLabel);
+
+  this->addChild(new KLabel("高:", 64, 32, 16*2, 16));
+  highTempLabel = new KLabel("00", 24 + 64, 32, 2*16, 16);
+  this->addChild(highTempLabel);
+
+  this->addChild(new KLabel("温:", 0, 48, 16*2, 16));
+  realTempLabel = new KLabel("00", 24, 48, 2*16, 16);
+  this->addChild(realTempLabel);
+
+  this->addChild(new KLabel("湿:", 64, 48, 16*2, 16));
+  realHumLabel = new KLabel("00", 24 + 64, 48, 2*16, 16);
+  this->addChild(realHumLabel);
 }
 
 void MainUI::enter()
@@ -29,33 +51,38 @@ void MainUI::enter()
 int8_t MainUI::tickOnce()
 {
   if(weather.isUpdated()) {
-    painter.clearDisplay();
-    painter.showPictureInFlash(0, 0, 32, 32, picture32X32[weather.getWeathers()[0].weatherIconCode]);
+    this->clearDisplay();
+    this->showPictureInFlash(0, 0, 32, 32, picture32X32[weather.getWeathers()[0].weatherIconCode]);
   } else {
-    painter.setXY(0, 0);
-    painter.setFontSize(OLED_FONT_24X12);
-    painter.showString("Waiting...");
+    this->setXY(0, 0);
+    this->setFontSize(OLED_FONT_24X12);
+    this->showString("Waiting...");
   }
 
   time_t rawtime = timeClient.getEpochTime();
   struct tm *info;
   info = localtime( &rawtime );
   
-  painter.setFontSize(OLED_FONT_16X8);
-  painter.setXY(32, 0);
-  painter.printf("  %02d:%02d:%02d", info->tm_hour, info->tm_min, info->tm_sec);            // 时间显示
-  painter.setXY(32, 16);
-  painter.printf(" %04d-%02d-%02d", info->tm_year + 1900, info->tm_mon + 1, info->tm_mday); // 温度显示
+  char printBuf[20];
+  sprintf(printBuf, "%02d:%02d:%02d", info->tm_hour, info->tm_min, info->tm_sec);            // 时间显示
+  timeLabel->setText(printBuf);
+
+  sprintf(printBuf, "%04d-%02d-%02d", info->tm_year + 1900, info->tm_mon + 1, info->tm_mday); // 温度显示
+  dateLabel->setText(printBuf);
   
-  
-  painter.setFont((uint8_t*)FONT_SSERIFF, 16, 16, true);
-  painter.setXY(0, 32);
-  // painter.printf("LOW:%d  HIGH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
-  // painter.setXY(0, 48);
-  // painter.printf("TEMP:%d  HUM:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
-  painter.printf("低:%d  高:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
-  painter.setXY(0, 48);
-  painter.printf("温:%d  湿:%d", (int)dht.readTemperature(), (int)dht.readHumidity());
+  sprintf(printBuf, "%d", weather.getWeathers()[0].lowTemp);
+  lowTempLabel->setText(printBuf);
+
+  sprintf(printBuf, "%d", weather.getWeathers()[0].highTemp);
+  highTempLabel->setText(printBuf);
+
+  sprintf(printBuf, "%d", (int)dht.readTemperature());
+  realTempLabel->setText(printBuf);
+
+  sprintf(printBuf, "%d", (int)dht.readHumidity());
+  realHumLabel->setText(printBuf);
+
+  this->paint();
 
   switch (buttonUser.pressStatus())
   {
