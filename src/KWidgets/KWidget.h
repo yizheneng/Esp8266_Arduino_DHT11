@@ -2,7 +2,7 @@
 #define _K_WIDGET_H_
 #include "KEvent.h"
 #include "../displayDrivers/DrawOnMemory.h"
-#define K_WIDGET_MAX_CHILD_NUM 10
+#define K_WIDGET_MAX_CHILD_NUM 15
 
 class KWidget : public DrawOnMemory
 {

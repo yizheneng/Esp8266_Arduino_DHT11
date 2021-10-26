@@ -2,6 +2,7 @@
 #define _MAIN_UI_H_
 #include "../KWidgets/KWidget.h"
 #include "../KWidgets/KLabel.h"
+#include "../KWidgets/KImage.h"
 
 class MainUI : public KWidget {
 public:
@@ -16,6 +17,8 @@ private:
   KLabel* highTempLabel;
   KLabel* realTempLabel;
   KLabel* realHumLabel;
+
+  KImage* weatherIcon;
 };
 
 #endif

@@ -22,7 +22,10 @@ MainUI::MainUI() :
 {
   timeLabel = new KLabel("00:00:00",   48, 0, 8*16, 16);
   dateLabel = new KLabel("1990-00-00", 40, 16, 8*16, 16);
+  
+  weatherIcon = new KImage(0, 0, 32, 32);
  
+  this->addChild(weatherIcon);
   this->addChild(timeLabel);
   this->addChild(dateLabel);
 
@@ -51,12 +54,7 @@ void MainUI::enter()
 int8_t MainUI::tickOnce()
 {
   if(weather.isUpdated()) {
-    this->clearDisplay();
-    this->showPictureInFlash(0, 0, 32, 32, picture32X32[weather.getWeathers()[0].weatherIconCode]);
-  } else {
-    this->setXY(0, 0);
-    this->setFontSize(OLED_FONT_24X12);
-    this->showString("Waiting...");
+    weatherIcon->setImage((uint8_t*)picture32X32[weather.getWeathers()[0].weatherIconCode], true);
   }
 
   time_t rawtime = timeClient.getEpochTime();
