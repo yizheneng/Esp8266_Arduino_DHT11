@@ -24,6 +24,9 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
 void DrawOnMemory::drawPoint(uint8_t x,uint8_t y,uint8_t t)
 {
   uint8_t i,m,n;
+  lastX = x;
+  lastY = y;
+  
   if((x >= DRAW_MAX_X) || (y >= DRAW_MAX_Y)) {
     return;
   }
@@ -243,6 +246,24 @@ void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t mode)
   }
 }
 
+int16_t DrawOnMemory::getStringWidth(const char* chr)
+{
+  uint8_t* next = (uint8_t*)chr;
+  uint16_t code = 0;
+  uint16_t width = 0;
+  if(fontHeight >= 16) { // 判断为中文字符集
+    while (next[0]) {
+      code = Utf8ToUnicode(next, next);
+      if(code <= 0x7F) {
+        width += fontWidth/2; // 英文字符的宽度是中文的一半
+      } else {
+        width += fontWidth;
+      }
+    }  
+  }
+  return strlen(chr) * fontWidth;
+}
+
 void DrawOnMemory::showPicture(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data)
 {
   uint16_t j=0;
@@ -298,7 +319,7 @@ void DrawOnMemory::setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h, bool is
   this->isFontInFlash = isFontInFlash;
 }
 
-void DrawOnMemory::setFontSize(OledFont font)
+void DrawOnMemory::setFont(OledFont font)
 {
   switch (font)
   {

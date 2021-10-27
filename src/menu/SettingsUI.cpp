@@ -16,7 +16,7 @@ void SettingsUI::enter()
 {
   painter.clearDisplay();
   painter.setXY(0, 0);
-  painter.setFontSize(OLED_FONT_12X6);
+  painter.setFont(OLED_FONT_12X6);
   painter.setDisplayMode(0);
   painter.printf("      Settings     ");
 }
@@ -63,7 +63,7 @@ int8_t SettingsUI::tickOnce()
 
 void SettingsUI::updateMenu(int currentIdex)
 {
-  painter.setFontSize(OLED_FONT_8X6);
+  painter.setFont(OLED_FONT_8X6);
   painter.setDisplayMode(1);
   painter.setXY(0, 18);
   painter.printf("  Wifi Settings\r\n");

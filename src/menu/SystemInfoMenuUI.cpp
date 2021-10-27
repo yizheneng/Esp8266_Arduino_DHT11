@@ -12,7 +12,7 @@ SystemInfoMenuUI::SystemInfoMenuUI() :
 {
   painter.showPicture(40, 0, 48, 48, systemIcon48X48[SYSTEM_ICON_INFO]);
   painter.setXY(30, 48);
-  painter.setFontSize(OLED_FONT_12X6);
+  painter.setFont(OLED_FONT_12X6);
   painter.printf("System Info");
 }
 

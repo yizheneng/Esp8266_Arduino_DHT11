@@ -14,6 +14,7 @@
 #include "src/menu/WeatherMenuUI.h"
 #include "src/menu/SettingsMenuUI.h"
 #include "src/menu/SettingsUI.h"
+#include "src/TestUI/ButtonTest.h"
 
 /**
  * TODO List:
@@ -80,7 +81,7 @@ void loop()
 {
   int i = 0;
   int currentUIIndex = UI_INDEX_MAIN_UI;
-  MainUI* mainUI = new MainUI();
+  ButtonTest* buttonTest = new ButtonTest();
 
   while (1)  {
     if (WiFi.status() == WL_CONNECTED) {
@@ -120,7 +121,7 @@ void loop()
     //   }
     // }
 
-    mainUI->tickOnce();
+    buttonTest->tickOnce();
     oled.syncDisplay((uint8_t*)OLED_GRAM);
 
     delay(10);

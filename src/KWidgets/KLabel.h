@@ -16,8 +16,10 @@ public:
 protected:
     void paint();
 
-private:
     std::string text;
+
+private:
+    
 };
 
 #endif

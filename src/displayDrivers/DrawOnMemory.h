@@ -37,15 +37,17 @@ public:
 
     void setFont(const uint8_t* fontPtr, uint8_t w, uint8_t h, bool isFontInFlash);
 
-    void setFontSize(OledFont font);
+    void setFont(OledFont font);
 
     void clearDisplay();
 
     void printf(char* format, ...);
 
+    int16_t getStringWidth(const char* chr);
+
     void setXY(const int8_t x, const int8_t y) {
-    this->x = x;
-    this->y = y;
+      this->x = x;
+      this->y = y;
     } 
 
     // 0 反色显示 1 正常显示
@@ -53,10 +55,8 @@ public:
       mode = val;
     }
 
-private:
-    int8_t x;
-    int8_t y;
-    int8_t mode;
+protected:
+    int8_t x, y, mode, lastX, lastY;
 
     const uint8_t* fontPtr;
     int8_t fontWidth;

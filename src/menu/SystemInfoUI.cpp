@@ -20,11 +20,11 @@ void SystemInfoUI::enter()
 {
   painter.clearDisplay();
   painter.setXY(0, 0);
-  painter.setFontSize(OLED_FONT_12X6);
+  painter.setFont(OLED_FONT_12X6);
   painter.setDisplayMode(0);
   painter.printf("     System Info     ");
 
-  painter.setFontSize(OLED_FONT_8X6);
+  painter.setFont(OLED_FONT_8X6);
   painter.setDisplayMode(1);
   painter.setXY(0, 18);
   painter.printf("Model:ESP12(esp8266)\r\n");

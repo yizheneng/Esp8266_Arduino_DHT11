@@ -7,6 +7,14 @@
 class KWidget : public DrawOnMemory
 {
 public:
+    enum AlignmentFlag {
+        AlignLeft = 0x01,
+        AlignRight = 0x02,
+        AlignHCenter = 0x04,
+        AlignTop = 0x10,
+        AlignBottom = 0x20,
+        AlignVCenter = 0x40,
+    };
     /**
      * x,y,w,h is in screen coord
      * w,h is now invalid
@@ -20,6 +28,9 @@ public:
 
     void setVisible(bool isVisible);
 
+    void setAlignment(uint8_t val);
+
+    void setFoused(bool val);
 protected:
     virtual int event(const KEvent&);
 
@@ -28,6 +39,10 @@ protected:
     bool isVisible;
 
     uint8_t x, y, w, h;
+
+    uint8_t alignmentFlag;
+
+    bool isFoused;
 private:
     KWidget* childs[K_WIDGET_MAX_CHILD_NUM];
 };

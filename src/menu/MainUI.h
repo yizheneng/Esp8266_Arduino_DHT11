@@ -3,6 +3,7 @@
 #include "../KWidgets/KWidget.h"
 #include "../KWidgets/KLabel.h"
 #include "../KWidgets/KImage.h"
+#include "../KWidgets/KButton.h"
 
 class MainUI : public KWidget {
 public:

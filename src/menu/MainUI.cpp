@@ -44,6 +44,8 @@ MainUI::MainUI() :
   this->addChild(new KLabel("湿:", 64, 48, 16*2, 16));
   realHumLabel = new KLabel("00", 24 + 64, 48, 2*16, 16);
   this->addChild(realHumLabel);
+
+  this->addChild(new KButton("Push", 20, 20, 40, 50));
 }
 
 void MainUI::enter()

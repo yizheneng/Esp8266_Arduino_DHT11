@@ -9,7 +9,9 @@ KWidget::KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     x(x),
     y(y),
     w(w),
-    h(h)
+    h(h),
+    alignmentFlag(AlignHCenter|AlignVCenter),
+    isFoused(false)
 {
     bzero(childs, sizeof(childs));
 }
@@ -49,4 +51,14 @@ void KWidget::paint()
             childs[i]->paint();
         }
     }
+}
+
+void KWidget::setAlignment(uint8_t val)
+{
+    alignmentFlag = val;
+}
+
+void KWidget::setFoused(bool val)
+{
+    isFoused = val;
 }

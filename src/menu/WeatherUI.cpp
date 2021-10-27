@@ -26,7 +26,7 @@ int8_t WeatherUI::tickOnce()
 {
   painter.clearDisplay();
   painter.setXY(0, 0);
-  painter.setFontSize(OLED_FONT_12X6);
+  painter.setFont(OLED_FONT_12X6);
   painter.setDisplayMode(0);
   painter.printf("       Weather       ");
 
@@ -36,7 +36,7 @@ int8_t WeatherUI::tickOnce()
     painter.showPictureInFlash(32 + 16 + 32 + 16, 16, 32, 32, picture32X32[weather.getWeathers()[2].weatherIconCode]);
 
     painter.setDisplayMode(1);
-    painter.setFontSize(OLED_FONT_8X6);
+    painter.setFont(OLED_FONT_8X6);
     painter.setXY(0, 48);
     painter.printf("L:%d\r\nH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
 
@@ -52,7 +52,7 @@ int8_t WeatherUI::tickOnce()
   } else {
     painter.setDisplayMode(1);
     painter.setXY(0, 16);
-    painter.setFontSize(OLED_FONT_24X12);
+    painter.setFont(OLED_FONT_24X12);
     painter.showString("Waiting...");
   }
   
