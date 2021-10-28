@@ -122,6 +122,9 @@ void loop()
     // }
 
     buttonTest->tickOnce();
+    buttonTest->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 10)); // 滴答信号输入
+    buttonTest->event(K_EVENT(K_EVENT_CLASS_USER_BUTTON, buttonUser.pressStatus())); // 按钮信号输入
+
     oled.syncDisplay((uint8_t*)OLED_GRAM);
 
     delay(10);

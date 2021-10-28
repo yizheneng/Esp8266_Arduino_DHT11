@@ -35,9 +35,17 @@ void KWidget::addChild(KWidget* child)
     }
 }
 
-int KWidget::event(const KEvent&)
+int KWidget::event(const KEventCode& event)
 {
-    return 0;
+    if(!isVisible) {
+        return;
+    }
+
+    for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
+        if((childs[i] != 0) && childs[i]->isVisible) {
+            childs[i]->event(event);
+        }
+    }
 }
 
 void KWidget::paint()

@@ -31,9 +31,10 @@ public:
     void setAlignment(uint8_t val);
 
     void setFoused(bool val);
-protected:
-    virtual int event(const KEvent&);
 
+    virtual int event(const KEventCode&);
+    
+protected:
     virtual void paint();
 
     bool isVisible;
