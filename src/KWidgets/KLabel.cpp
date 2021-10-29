@@ -4,7 +4,8 @@
 
 KLabel::KLabel(std::string text, uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     KWidget(x, y, w, h),
-    text(text)
+    text(text),
+    isScroll(false)
 {
     setFont((uint8_t*)FONT_SSERIFF, 16, 16, true);
 }
@@ -23,7 +24,39 @@ std::string KLabel::getText()
     return text;
 }
 
+int KLabel::event(const KEventCode& event)
+{
+    switch (K_EVENT_CLASS(event)) {
+        case K_EVENT_CLASS_TICK_ONCE:
+            if(!isScroll) 
+                break;
+            
+            // Serial.printf("strlen:%d\r\n", this->getStringWidth(text.c_str()));
+            if(this->getStringWidth(text.c_str()) > w) {
+                this->currentPose ++;
+                if(this->currentPose >= (this->getStringWidth(text.c_str()) - w)) {
+                    this->currentPose = 0;
+                }
+            } else {
+                this->currentPose = 0;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 void KLabel::paint()
 {
-    this->showString(x, y, text.c_str(), 1);
+    if(isScroll) {
+        this->showString(x - this->currentPose, y, text.c_str(), 1);
+        // Serial.printf("this->currentPose:%d\r\n", this->currentPose);
+    } else {
+        this->showString(x, y, text.c_str(), 1);
+    }
+}
+
+void KLabel::setScroll(bool val)
+{
+    this->isScroll = val;
 }

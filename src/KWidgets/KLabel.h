@@ -11,15 +11,18 @@ public:
 
     void setText(std::string text);
 
+    void setScroll(bool val);
+
     std::string getText();
 
+    virtual int event(const KEventCode&);
+
 protected:
-    void paint();
+    virtual void paint();
 
     std::string text;
-
-private:
-    
+    bool isScroll;
+    int16_t currentPose;
 };
 
 #endif

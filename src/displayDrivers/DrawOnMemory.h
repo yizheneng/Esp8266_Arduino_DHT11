@@ -13,7 +13,9 @@ class DrawOnMemory
 public:
     DrawOnMemory(uint8_t* gramPtr);
 
-    void drawPoint(uint8_t x, uint8_t y, uint8_t t);
+    DrawOnMemory(uint8_t* gramPtr, uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+
+    void drawPoint(int16_t x, int16_t y, uint8_t t);
 
     void drawCircle(uint8_t x, uint8_t y, uint8_t r);
 
@@ -23,11 +25,11 @@ public:
 
     void drawProcessBar(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t per);
 
-    void showChar(uint8_t x, uint8_t y, uint16_t chr, uint8_t mode);
+    void showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode);
 
     void showChar(uint8_t chr);
 
-    void showString(uint8_t x, uint8_t y, const char* chr, uint8_t mode);
+    void showString(int16_t x, int16_t y, const char* chr, uint8_t mode);
 
     void showString(const char* chr);
 
@@ -46,8 +48,8 @@ public:
     int16_t getStringWidth(const char* chr);
 
     void setXY(const int8_t x, const int8_t y) {
-      this->x = x;
-      this->y = y;
+      this->lastX = x;
+      this->lastY = y;
     } 
 
     // 0 反色显示 1 正常显示
@@ -56,8 +58,8 @@ public:
     }
 
 protected:
-    int8_t x, y, mode, lastX, lastY;
-
+    uint16_t mode, lastX, lastY;
+    uint8_t minX, minY, maxX, maxY;
     const uint8_t* fontPtr;
     int8_t fontWidth;
     int8_t fontHeight;

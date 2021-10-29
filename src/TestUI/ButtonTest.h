@@ -2,6 +2,7 @@
 #define _BUTTON_TEST_H_
 #include "../KWidgets/KWidget.h"
 #include "../KWidgets/KButton.h"
+#include "../KWidgets/KLabel.h"
 
 class ButtonTest : public KWidget
 {

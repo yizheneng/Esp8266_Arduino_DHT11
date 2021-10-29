@@ -3,9 +3,9 @@
 #include <stdint.h>
 typedef uint64_t KEventCode;
 
-#define K_EVENT(class,data)  ((class<<32&0xffffffff00000000)|(data&0xffffffff))
-#define K_EVENT_CLASS(event) (event>>32)
-#define K_EVENT_DATA(event)  (event&0xffffffff)
+#define K_EVENT(class,data)  ((class<<16&0xffff0000)|(data&0xffff))
+#define K_EVENT_CLASS(event) (event>>16&0xffff)
+#define K_EVENT_DATA(event)  (event&0xffff)
 
 enum KEventClass {
     K_EVENT_CLASS_USER_BUTTON = 0,

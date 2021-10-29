@@ -4,7 +4,7 @@
 extern uint8_t OLED_GRAM[144][8];
 
 KWidget::KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
-    DrawOnMemory((uint8_t*)OLED_GRAM),
+    DrawOnMemory((uint8_t*)OLED_GRAM, x, y, w, h),
     isVisible(true),
     x(x),
     y(y),
@@ -38,7 +38,7 @@ void KWidget::addChild(KWidget* child)
 int KWidget::event(const KEventCode& event)
 {
     if(!isVisible) {
-        return;
+        return 0;
     }
 
     for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
@@ -46,6 +46,8 @@ int KWidget::event(const KEventCode& event)
             childs[i]->event(event);
         }
     }
+
+    return 0;
 }
 
 void KWidget::paint()

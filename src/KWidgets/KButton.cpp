@@ -11,7 +11,7 @@ KButton::~KButton()
 
 void KButton::paint()
 {
-    uint8_t stringX = this->x, stringY = this->y;
+    int16_t stringX = this->x, stringY = this->y;
 
     if(alignmentFlag & KWidget::AlignLeft) {
         stringX += 2;
@@ -32,7 +32,6 @@ void KButton::paint()
     }
 
     this->drawRect(x, y, w, h, mode, false);
-
     if(isFoused) {
         this->drawRect(x + 2, y + 2, w - 4, h - 4, mode, true);
         this->showString(stringX, stringY, text.c_str(), 0);

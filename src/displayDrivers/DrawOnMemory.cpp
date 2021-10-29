@@ -1,18 +1,39 @@
 #include "DrawOnMemory.h"
 #include "font/ascii_font.h"
 #include <Arduino.h>
-#define DRAW_MAX_X 128
-#define DRAW_MAX_Y 64
+#define DRAW_MAX_X 127
+#define DRAW_MAX_Y 63
 
 DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
     gramPtr(gramPtr),
-    x(0),
-    y(0),
+    lastX(0),
+    lastY(0),
     fontWidth(6),
     fontHeight(8),
     isFontInFlash(false),
     fontPtr((uint8_t*)asc2_0806),
-    mode(1)
+    mode(1),
+    minX(0),
+    minY(0),
+    maxX(DRAW_MAX_X),
+    maxY(DRAW_MAX_Y)
+{
+
+}
+
+DrawOnMemory::DrawOnMemory(uint8_t* gramPtr, uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
+  gramPtr(gramPtr),
+  lastX(0),
+  lastY(0),
+  fontWidth(6),
+  fontHeight(8),
+  isFontInFlash(false),
+  fontPtr((uint8_t*)asc2_0806),
+  mode(1),
+  minX(x),
+  minY(y),
+  maxX(x + w),
+  maxY(y + h + 1)
 {
 
 }
@@ -21,13 +42,18 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
 //x:0~127
 //y:0~63
 //t:1 填充 0,清空  
-void DrawOnMemory::drawPoint(uint8_t x,uint8_t y,uint8_t t)
+void DrawOnMemory::drawPoint(int16_t x,int16_t y,uint8_t t)
 {
   uint8_t i,m,n;
   lastX = x;
   lastY = y;
   
-  if((x >= DRAW_MAX_X) || (y >= DRAW_MAX_Y)) {
+  if((x >= DRAW_MAX_X) 
+     || (y >= DRAW_MAX_Y)
+     || (x < minX)
+     || (y < minY)
+     || (x > maxX)
+     || (y > maxY)) {
     return;
   }
 
@@ -136,7 +162,7 @@ void DrawOnMemory::drawLine(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t 
 //y:0~63
 //size1:选择字体 6x8/6x12/8x16/12x24
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showChar(uint8_t x,uint8_t y,uint16_t chr,uint8_t mode)
+void DrawOnMemory::showChar(int16_t x,int16_t y,uint16_t chr,uint8_t mode)
 {
   uint8_t i,m,temp,chr1;
   uint8_t x0=x,y0=y;
@@ -223,7 +249,7 @@ uint16_t Utf8ToUnicode(uint8_t* buf, uint8_t*& nextPtr) {
 //size1:字体大小 
 //*chr:字符串起始地址 
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showString(uint8_t x,uint8_t y,const char *chr,uint8_t mode)
+void DrawOnMemory::showString(int16_t x,int16_t y,const char *chr,uint8_t mode)
 {
   if(isFontInFlash) {
     uint8_t* next = (uint8_t*)chr;
@@ -260,8 +286,11 @@ int16_t DrawOnMemory::getStringWidth(const char* chr)
         width += fontWidth;
       }
     }  
+    return width;
+  } else {
+    return strlen(chr) * fontWidth;
   }
-  return strlen(chr) * fontWidth;
+  
 }
 
 void DrawOnMemory::showPicture(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t* data)
@@ -342,31 +371,31 @@ void DrawOnMemory::setFont(OledFont font)
 
 void DrawOnMemory::showString(const char* chr)
 {
-  showString(x,y,chr,mode);
+  showString(lastX,lastY,chr,mode);
 }
 
 void DrawOnMemory::showChar(uint8_t chr)
 {
-  if((x + fontWidth) > (DRAW_MAX_X + 1)) {
-    x = 0;
-    y += fontHeight;
+  if((lastX + fontWidth) > (DRAW_MAX_X + 1)) {
+    lastX = 0;
+    lastY += fontHeight;
   }
 
-  if((y + fontHeight) > (DRAW_MAX_Y + 1)) {
-    y = 0;
+  if((lastY + fontHeight) > (DRAW_MAX_Y + 1)) {
+    lastY = 0;
   }
 
   if(chr == '\r') {
-    x = 0;
+    lastX = 0;
     return;
   }
 
   if(chr == '\n') {
-    y += fontHeight;
+    lastY += fontHeight;
     return;
   }
-  showChar(x, y, chr, mode);
-  x += fontWidth;
+  showChar(lastX, lastY, chr, mode);
+  lastX += fontWidth;
 }
 
 void DrawOnMemory::printf(char* format, ...)
