@@ -17,9 +17,9 @@ public:
 
     virtual int event(const KEventCode&);
 
-protected:
     virtual void paint();
 
+protected:
     std::string text;
     bool isScroll;
     int16_t currentPose;

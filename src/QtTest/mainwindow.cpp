@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "../displayDrivers/DrawOnMemory.h"
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QStyle>
+#include <QGridLayout>
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,6 +16,21 @@ MainWindow::MainWindow(QWidget *parent)
     QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget(displayLabel);
 
+    upButton = new QPushButton(QApplication::style()->standardIcon((QStyle::StandardPixmap)50), "");
+    downButton = new QPushButton(QApplication::style()->standardIcon((QStyle::StandardPixmap)51), "");
+    leftButton = new QPushButton(QApplication::style()->standardIcon((QStyle::StandardPixmap)52), "");
+    rightButton = new QPushButton(QApplication::style()->standardIcon((QStyle::StandardPixmap)53), "");
+    okButton = new QPushButton("OK");
+
+    QGridLayout* btnLayout = new QGridLayout();
+    btnLayout->addWidget(upButton, 0, 1);
+    btnLayout->addWidget(downButton, 2, 1);
+    btnLayout->addWidget(leftButton, 1, 0);
+    btnLayout->addWidget(rightButton, 1, 2);
+    btnLayout->addWidget(okButton, 1, 1);
+
+    layout->addLayout(btnLayout);
+
     this->setLayout(layout);
 
     displayTimer = new QTimer();
@@ -20,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     displayTimer->start(100);
 
     buttonTest = new ButtonTest();
+
+    this->setStyleSheet("background-color: #CDC5BF;");
 }
 
 MainWindow::~MainWindow()

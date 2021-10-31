@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QLabel>
 #include <QTimer>
+#include <QPushButton>
 #include "../TestUI/ButtonTest.h"
 
 class MainWindow : public QWidget
@@ -24,6 +25,11 @@ private:
     QLabel* displayLabel;
     QTimer* displayTimer;
     ButtonTest* buttonTest;
+    QPushButton* upButton;
+    QPushButton* downButton;
+    QPushButton* leftButton;
+    QPushButton* rightButton;
+    QPushButton* okButton;
 };
 
 #endif // MAINWINDOW_H

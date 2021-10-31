@@ -21,6 +21,8 @@ public:
 
     void drawPoint(int16_t x, int16_t y, uint8_t t);
 
+    void drawPoint(int16_t x, int16_t y, uint8_t t, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY);
+
     void drawCircle(uint8_t x, uint8_t y, uint8_t r);
 
     void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t mode);
@@ -31,9 +33,13 @@ public:
 
     void showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode);
 
+    void showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY);
+
     void showChar(uint8_t chr);
 
     void showString(int16_t x, int16_t y, const char* chr, uint8_t mode);
+
+    void showString(int16_t x, int16_t y, const char* chr, uint8_t mode, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY);
 
     void showString(const char* chr);
 

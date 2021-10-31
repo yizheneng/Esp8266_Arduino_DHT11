@@ -46,30 +46,35 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr, uint8_t x, uint8_t y, uint8_t w, ui
 //t:1 填充 0,清空  
 void DrawOnMemory::drawPoint(int16_t x,int16_t y,uint8_t t)
 {
-  uint8_t i,m,n;
-  lastX = x;
-  lastY = y;
-  
-  if((x >= DRAW_MAX_X) 
-     || (y >= DRAW_MAX_Y)
-     || (x < minX)
-     || (y < minY)
-     || (x > maxX)
-     || (y > maxY)) {
-    return;
-  }
+  drawPoint(x, y, t, minX, minY, maxX, maxY);
+}
 
-  i=y/8;
-  m=y%8;
-  n=1<<m;
-  uint8_t (*p)[8] = (uint8_t (*)[8])gramPtr;
-  if(t){p[x][i]|=n;}
-  else
-  {
-    p[x][i]=~p[x][i];
-    p[x][i]|=n;
-    p[x][i]=~p[x][i];
-  }
+void DrawOnMemory::drawPoint(int16_t x, int16_t y, uint8_t t, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY)
+{
+    uint8_t i,m,n;
+    lastX = x;
+    lastY = y;
+
+    if((x >= DRAW_MAX_X)
+       || (y >= DRAW_MAX_Y)
+       || (x < tempMinX)
+       || (y < tempMinY)
+       || (x > tempMaxX)
+       || (y > tempMaxY)) {
+      return;
+    }
+
+    i=y/8;
+    m=y%8;
+    n=1<<m;
+    uint8_t (*p)[8] = (uint8_t (*)[8])gramPtr;
+    if(t){p[x][i]|=n;}
+    else
+    {
+      p[x][i]=~p[x][i];
+      p[x][i]|=n;
+      p[x][i]=~p[x][i];
+    }
 }
 
 void DrawOnMemory::drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t isFull)
@@ -83,7 +88,7 @@ void DrawOnMemory::drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t 
     drawLine(x, y, x + w, y, mode);
     drawLine(x + w, y, x + w, y + h, mode);
     drawLine(x, y, x, y + h, mode);
-    drawLine(x, y + h, x + w, y + h, mode);
+    drawLine(x, y + h, x + w + 1, y + h, mode);
   }
 }
 
@@ -164,63 +169,67 @@ void DrawOnMemory::drawLine(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t 
 //y:0~63
 //size1:选择字体 6x8/6x12/8x16/12x24
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showChar(int16_t x,int16_t y,uint16_t chr,uint8_t mode)
+void DrawOnMemory::showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode)
 {
-  uint8_t i,m,temp,chr1;
-  uint8_t x0=x,y0=y;
-  
-  if(isFontInFlash) {
-    int tempFontWidth = fontWidth;
-    if(chr < 0x7F) {
-      tempFontWidth = fontWidth/2;
-    }
+    showChar(x, y, chr, mode, minX, minY, maxX, maxY);
+}
 
-    int byteSize = fontHeight*tempFontWidth/8;
-    uint8_t* tempData = (uint8_t*)calloc(byteSize, sizeof(char));
-    if(chr <= 0x7F) {
-      memcpy(tempData, fontPtr + chr*byteSize, byteSize);
+void DrawOnMemory::showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY)
+{
+    uint8_t i,m,temp,chr1;
+    uint8_t x0=x,y0=y;
+
+    if(isFontInFlash) {
+      int tempFontWidth = fontWidth;
+      if(chr < 0x7F) {
+        tempFontWidth = fontWidth/2;
+      }
+
+      int byteSize = fontHeight*tempFontWidth/8;
+      uint8_t* tempData = (uint8_t*)calloc(byteSize, sizeof(char));
+      if(chr <= 0x7F) {
+        memcpy(tempData, fontPtr + chr*byteSize, byteSize);
+      } else {
+        chr = chr - 0x4E00;
+        memcpy(tempData, fontPtr + chr*byteSize + 128 * 16, byteSize);
+      }
+
+      for(int i=0; i < byteSize; i++) {
+        temp = tempData[i];
+        for(m=0;m<8;m++) {
+          if(temp&0x01) drawPoint(x, y, mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+          else drawPoint(x, y, !mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+          temp>>=1;
+          y++;
+        }
+        x++;
+        if((x-x0)%tempFontWidth == 0) {
+          x = x0;
+          y0 = y0+8;
+        }
+        y=y0;
+      }
+      free(tempData);
     } else {
-      chr = chr - 0x4E00;
-      memcpy(tempData, fontPtr + chr*byteSize + 128 * 16, byteSize);
-    }
-    
-    for(int i=0; i < byteSize; i++) {
-      temp = tempData[i];
-      for(m=0;m<8;m++) {
-        if(temp&0x01) drawPoint(x,y,mode);
-        else drawPoint(x,y,!mode);
-        temp>>=1;
-        y++;
+       int byteSize = 0;
+       if(fontHeight==8)
+        byteSize=6;
+      else
+        byteSize=(fontHeight/8+((fontHeight%8)?1:0))*(fontHeight/2);  //得到字体一个字符对应点阵集所占的字节数
+      chr1=chr-' ';  //计算偏移后的值
+      for(i=0;i<byteSize;i++) {
+        temp=fontPtr[chr1*byteSize + i]; //调用0806字体
+        for(m=0;m<8;m++) {
+          if(temp&0x01) drawPoint(x, y, mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+          else drawPoint(x, y, !mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+          temp>>=1;
+          y++;
+        }
+        x++;
+        if((fontHeight!=8)&&((x-x0)==fontHeight/2)) {x=x0;y0=y0+8;}
+        y=y0;
       }
-      x++;
-      if((x-x0)%tempFontWidth == 0) {
-        x = x0;
-        y0 = y0+8;
-      }
-      y=y0;
     }
-    free(tempData);
-  } else {
-     int byteSize = 0;
-     if(fontHeight==8)
-      byteSize=6;
-    else 
-      byteSize=(fontHeight/8+((fontHeight%8)?1:0))*(fontHeight/2);  //得到字体一个字符对应点阵集所占的字节数
-    chr1=chr-' ';  //计算偏移后的值
-    for(i=0;i<byteSize;i++) {
-      temp=fontPtr[chr1*byteSize + i]; //调用0806字体
-      for(m=0;m<8;m++) {
-        if(temp&0x01) drawPoint(x,y,mode);
-        else drawPoint(x,y,!mode);
-        temp>>=1;
-        y++;
-      }
-      x++;
-      if((fontHeight!=8)&&((x-x0)==fontHeight/2)) {x=x0;y0=y0+8;}
-      y=y0;
-    }
-  }
-  
 }
 
 uint16_t Utf8ToUnicode(uint8_t* buf, uint8_t*& nextPtr) {
@@ -251,27 +260,32 @@ uint16_t Utf8ToUnicode(uint8_t* buf, uint8_t*& nextPtr) {
 //size1:字体大小 
 //*chr:字符串起始地址 
 //mode:0,反色显示;1,正常显示
-void DrawOnMemory::showString(int16_t x,int16_t y,const char *chr,uint8_t mode)
+void DrawOnMemory::showString(int16_t x, int16_t y, const char *chr, uint8_t mode)
 {
-  if(isFontInFlash) {
-    uint8_t* next = (uint8_t*)chr;
-    uint16_t code = 0;
-    while (next[0]) {
-      code = Utf8ToUnicode(next, next);
-      showChar(x,y,code,mode);
-      if(code <= 0x7F) {
-        x += fontWidth/2; // 英文字符的宽度是中文的一半
-      } else {
+    showString(x, y, chr, mode, minX, minY, maxX, maxY);
+}
+
+void DrawOnMemory::showString(int16_t x, int16_t y, const char* chr, uint8_t mode, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY)
+{
+    if(isFontInFlash) {
+      uint8_t* next = (uint8_t*)chr;
+      uint16_t code = 0;
+      while (next[0]) {
+        code = Utf8ToUnicode(next, next);
+        showChar(x, y, code, mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+        if(code <= 0x7F) {
+          x += fontWidth/2; // 英文字符的宽度是中文的一半
+        } else {
+          x += fontWidth;
+        }
+      }
+    } else {
+      while((*chr>=' ')&&(*chr<='~')) {
+        showChar(x, y, *chr, mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
         x += fontWidth;
+        chr++;
       }
     }
-  } else {
-    while((*chr>=' ')&&(*chr<='~')) {
-      showChar(x,y,*chr,mode);
-      x += fontWidth;
-      chr++;
-    }
-  }
 }
 
 int16_t DrawOnMemory::getStringWidth(const char* chr)
