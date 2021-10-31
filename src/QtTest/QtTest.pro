@@ -17,7 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ../KWidgets/KButton.cpp \
-    ../KWidgets/KChooseBox.cpp \
+    ../KWidgets/KCheckBox.cpp \
     ../KWidgets/KImage.cpp \
     ../KWidgets/KLabel.cpp \
     ../KWidgets/KListSelect.cpp \
@@ -31,7 +31,7 @@ SOURCES += \
 
 HEADERS += \
     ../KWidgets/KButton.h \
-    ../KWidgets/KChooseBox.h \
+    ../KWidgets/KCheckBox.h \
     ../KWidgets/KEvent.h \
     ../KWidgets/KImage.h \
     ../KWidgets/KLabel.h \
