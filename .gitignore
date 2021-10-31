@@ -1,3 +1,4 @@
 .vscode/
 Esp8266_Arduino_DHT11.ino.nodemcu.bin
 badapple.h
+build-*

@@ -44,6 +44,7 @@ int KLabel::event(const KEventCode& event)
         default:
             break;
     }
+    return 0;
 }
 
 void KLabel::paint()

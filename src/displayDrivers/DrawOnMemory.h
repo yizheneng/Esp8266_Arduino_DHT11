@@ -1,12 +1,16 @@
 #ifndef _DRAW_ON_MEMORY_H_
 #define _DRAW_ON_MEMORY_H_
 #include <stdint.h>
+
 enum OledFont { // 这些字库内不含ASCII码以外的字符
   OLED_FONT_8X6 = 8,
   OLED_FONT_12X6 = 12,
   OLED_FONT_16X8 = 16,
   OLED_FONT_24X12 = 24, 
 };
+
+#define DRAW_MAX_X 127
+#define DRAW_MAX_Y 63
 
 class DrawOnMemory
 {

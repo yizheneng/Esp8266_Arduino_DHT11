@@ -1,8 +1,10 @@
 #include "DrawOnMemory.h"
 #include "font/ascii_font.h"
-#include <Arduino.h>
-#define DRAW_MAX_X 127
-#define DRAW_MAX_Y 63
+#include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <stdio.h>
+using namespace std;
 
 DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
     gramPtr(gramPtr),
@@ -332,7 +334,7 @@ void DrawOnMemory::showPictureInFlash(uint8_t x, uint8_t y, uint8_t width, uint8
 void DrawOnMemory::clearDisplay()
 {
   uint8_t (*p)[8] = (uint8_t (*)[8])gramPtr;
-  u8 i,n;
+  uint8_t i,n;
   for(i=0;i<8;i++) {
      for(n=0;n<128;n++) {
        p[n][i]=0x00;//清除所有数据
@@ -405,7 +407,7 @@ void DrawOnMemory::printf(char* format, ...)
   int ret;
   va_list ap;
   va_start(ap, format);
-  ret = vsniprintf(buf, sizeof(buf), format, ap);
+  ret = vsnprintf(buf, sizeof(buf), format, ap);
   va_end(ap);
   showString(buf);
 }

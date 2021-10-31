@@ -1,5 +1,6 @@
 #include "KWidget.h"
 #include <string.h>
+#define bzero(a, b)             memset(a, 0, b)
 
 extern uint8_t OLED_GRAM[144][8];
 
