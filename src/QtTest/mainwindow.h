@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QPushButton>
-#include "../TestUI/ButtonTest.h"
+#include "../KWidgets/KWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -18,13 +18,19 @@ public:
 private slots:
     void onTimeOut();
 
+    void onUpBtnClicked();
+    void onDownBtnClicked();
+    void onLeftBtnClicked();
+    void onRightBtnClicked();
+    void onOKBtnClicked();
+
 private:
     void syncToImage();
 
     QImage* displayImage;
     QLabel* displayLabel;
     QTimer* displayTimer;
-    ButtonTest* buttonTest;
+    KWidget* testUI;
     QPushButton* upButton;
     QPushButton* downButton;
     QPushButton* leftButton;

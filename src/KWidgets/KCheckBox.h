@@ -13,10 +13,9 @@ public:
 
     virtual int event(const KEventCode&);
 
+    bool isChecked;
 protected:
     virtual void paint();
-
-    bool isChecked;
 };
 
 #endif

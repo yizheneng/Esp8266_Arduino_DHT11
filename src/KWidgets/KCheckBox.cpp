@@ -39,6 +39,8 @@ void KCheckBox::paint()
     this->drawRect(x + 2, y + 2, 16 - 4, 16 - 4, 1, false);
     if(isChecked) {
         this->drawRect(x + 5, y + 5, 16 - 9, 16 - 10, 1, true);
+    } else {
+        this->drawRect(x + 5, y + 5, 16 - 9, 16 - 10, 0, true);
     }
 
     uint8_t tempMinX, tempMinY, tempMaxX, tempMaxY;
@@ -51,6 +53,6 @@ void KCheckBox::paint()
     if(isScroll) {
         this->showString(x - this->currentPose, y, text.c_str(), !isFoused, tempMinX, tempMinY, tempMaxX, tempMaxY);
     } else {
-        this->showString(x + 16, y, text.c_str(), !isFoused, tempMinX, tempMinY, tempMaxX, tempMaxY);
+        this->showString(x + 18, y, text.c_str(), !isFoused, tempMinX, tempMinY, tempMaxX, tempMaxY);
     }
 }

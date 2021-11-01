@@ -2,6 +2,9 @@
 #define _K_WIDGET_H_
 #include "KEvent.h"
 #include "../displayDrivers/DrawOnMemory.h"
+#include <string.h>
+
+#define bzero(a, b)             memset(a, 0, b)
 #define K_WIDGET_MAX_CHILD_NUM 15
 
 class KWidget : public DrawOnMemory
@@ -30,10 +33,13 @@ public:
 
     void setAlignment(uint8_t val);
 
-    void setFoused(bool val);
+    virtual void setFoused(bool val);
+
+    uint8_t childNum();
 
     virtual int event(const KEventCode&);
     
+    bool isFoused;
 protected:
     virtual void paint();
 
@@ -43,8 +49,6 @@ protected:
 
     uint8_t alignmentFlag;
 
-    bool isFoused;
-private:
     KWidget* childs[K_WIDGET_MAX_CHILD_NUM];
 };
 

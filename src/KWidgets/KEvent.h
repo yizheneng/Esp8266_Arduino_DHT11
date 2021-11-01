@@ -18,6 +18,7 @@ enum KEventKey {
     K_EVENT_KEY_DOWN,
     K_EVENT_KEY_LEFT,
     K_EVENT_KEY_RIGHT,
+    K_EVENT_KEY_OK,
 };
 
 // 需匹配按键的状态

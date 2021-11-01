@@ -4,6 +4,10 @@
 #include <QApplication>
 #include <QStyle>
 #include <QGridLayout>
+#include "../TestUI/ButtonTest.h"
+#include "../TestUI/listtest.h"
+#include <QDebug>
+
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 
 MainWindow::MainWindow(QWidget *parent)
@@ -21,6 +25,13 @@ MainWindow::MainWindow(QWidget *parent)
     leftButton = new QPushButton(QApplication::style()->standardIcon((QStyle::StandardPixmap)52), "");
     rightButton = new QPushButton(QApplication::style()->standardIcon((QStyle::StandardPixmap)53), "");
     okButton = new QPushButton("OK");
+    okButton->setMinimumSize(10, 10);
+
+    connect(upButton, SIGNAL(clicked()), this, SLOT(onUpBtnClicked()));
+    connect(downButton, SIGNAL(clicked()), this, SLOT(onDownBtnClicked()));
+    connect(leftButton, SIGNAL(clicked()), this, SLOT(onLeftBtnClicked()));
+    connect(rightButton, SIGNAL(clicked()), this, SLOT(onRightBtnClicked()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(onOKBtnClicked()));
 
     QGridLayout* btnLayout = new QGridLayout();
     btnLayout->addWidget(upButton, 0, 1);
@@ -37,15 +48,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(displayTimer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
     displayTimer->start(100);
 
-    buttonTest = new ButtonTest();
+    testUI = new ListTest();
 
     this->setStyleSheet("background-color: #CDC5BF;");
+
+    this->setWindowFlags(Qt::WindowCloseButtonHint);
 }
 
 MainWindow::~MainWindow()
 {
 }
-
 
 void MainWindow::syncToImage()
 {
@@ -65,9 +77,39 @@ void MainWindow::syncToImage()
 
 void MainWindow::onTimeOut()
 {
-    buttonTest->tickOnce();
-    buttonTest->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 10)); // 滴答信号输入
+    ((ListTest*)testUI)->tickOnce();
+    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 10)); // 滴答信号输入
     syncToImage();
     displayLabel->setPixmap(QPixmap::fromImage(*displayImage));
+}
+
+void MainWindow::onUpBtnClicked()
+{
+    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_UP));
+    qDebug() << "UP";
+}
+
+void MainWindow::onDownBtnClicked()
+{
+    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_DOWN));
+    qDebug() << "DOWN";
+}
+
+void MainWindow::onLeftBtnClicked()
+{
+    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_LEFT));
+    qDebug() << "LEFT";
+}
+
+void MainWindow::onRightBtnClicked()
+{
+    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
+    qDebug() << "RIGHT";
+}
+
+void MainWindow::onOKBtnClicked()
+{
+    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
+    qDebug() << "OK";
 }
 

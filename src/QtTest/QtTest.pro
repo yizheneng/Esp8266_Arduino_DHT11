@@ -23,6 +23,7 @@ SOURCES += \
     ../KWidgets/KListSelect.cpp \
     ../KWidgets/KWidget.cpp \
     ../TestUI/ButtonTest.cpp \
+    ../TestUI/listtest.cpp \
     ../displayDrivers/DrawOnMemory.cpp \
     ../displayDrivers/font/ascii_font.c \
     ../displayDrivers/font/sseriff.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     ../KWidgets/KListSelect.h \
     ../KWidgets/KWidget.h \
     ../TestUI/ButtonTest.h \
+    ../TestUI/listtest.h \
     ../displayDrivers/DrawOnMemory.h \
     ../displayDrivers/UIInterface.h \
     ../displayDrivers/font/ascii_font.h \
