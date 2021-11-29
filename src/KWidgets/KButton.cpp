@@ -31,11 +31,12 @@ void KButton::paint()
         stringY = (h - this->fontHeight) / 2 + y;
     }
 
-    this->drawRect(x, y, w, h, mode, false);
+    this->drawRect(x, y, w, h, mode, false); // 画外框
     if(isFoused) {
-        this->drawRect(x + 2, y + 2, w - 4, h - 4, mode, true);
+        this->drawRect(x + 2, y + 2, w - 4, h - 4, mode, true); // 画选中背景
         this->showString(stringX, stringY, text.c_str(), 0);
     } else {
+        this->drawRect(x + 2, y + 2, w - 4, h - 4, !mode, true); // 画未选中背景
         this->showString(stringX, stringY, text.c_str(), 1);
     }
 }

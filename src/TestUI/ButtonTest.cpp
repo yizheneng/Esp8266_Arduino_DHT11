@@ -11,8 +11,8 @@ ButtonTest::ButtonTest(/* args */) :
 
     KCheckBox* chooseBox = new KCheckBox("请选择这个选项吧,有惊喜啊", 0, 16, 100, 16);
     chooseBox->setScroll(true);
-    chooseBox->setChecked(true);
-    chooseBox->setFoused(true);
+//    chooseBox->setChecked(true);
+//    chooseBox->setFoused(true);
 
     // okBtn->setFoused(true);
     okBtn->setFont(OLED_FONT_8X6);

@@ -9,10 +9,10 @@ ListTest::ListTest() :
 //    checkBox->setChecked(true);
 //    checkBox->setFoused(true);
 
-    KListSelect* listSelect = new KListSelect(0, 0, 100, 64 - 16);
+    KListSelect* listSelect = new KListSelect(0, 0, 128, 64);
     listSelect->addChild("条目1");
     listSelect->addChild("条目2");
-    listSelect->addChild("条目3");
+    listSelect->addChild("条目32265511588");
     listSelect->addChild("条目4");
 
     listSelect->setSelectedIndex(0);

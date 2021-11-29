@@ -79,7 +79,6 @@ void DrawOnMemory::drawPoint(int16_t x, int16_t y, uint8_t t, uint8_t tempMinX, 
 
 void DrawOnMemory::drawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t mode, uint8_t isFull)
 {
-  this->mode = mode;
   if(isFull) {
     for(int i = 0; i <= h; i ++) {
       drawLine(x, y + i, x + w, y + i, mode);

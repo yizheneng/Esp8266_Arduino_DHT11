@@ -15,19 +15,24 @@ void KCheckBox::setChecked(bool val)
 int KCheckBox::event(const KEventCode& event)
 {
     switch (K_EVENT_CLASS(event)) {
-        case K_EVENT_CLASS_TICK_ONCE:
-            if(!isScroll)
-                break;
+    case K_EVENT_CLASS_TICK_ONCE:
+        if(!(isScroll || isFoused))
+            break;
 
-            if(this->getStringWidth(text.c_str()) > (w - 18)) {
-                this->currentPose ++;
-                if(this->currentPose >= (this->getStringWidth(text.c_str()) - (w - 18))) {
-                    this->currentPose = 0;
-                }
-            } else {
+        if(this->getStringWidth(text.c_str()) > (w - 18)) {
+            this->currentPose ++;
+            if(this->currentPose >= (this->getStringWidth(text.c_str()) - (w - 18))) {
                 this->currentPose = 0;
             }
-            break;
+        } else {
+            this->currentPose = 0;
+        }
+        break;
+    case K_EVENT_CLASS_KEY:
+        if((K_EVENT_DATA(event) == K_EVENT_KEY_OK)) {
+            this->setChecked(!this->isChecked);
+        }
+        break;
         default:
             break;
     }
@@ -50,8 +55,8 @@ void KCheckBox::paint()
     tempMaxX = x + w;
     tempMaxY = y + h;
 
-    if(isScroll) {
-        this->showString(x - this->currentPose, y, text.c_str(), !isFoused, tempMinX, tempMinY, tempMaxX, tempMaxY);
+    if(isScroll || isFoused) {
+        this->showString(x - this->currentPose + 18, y, text.c_str(), !isFoused, tempMinX, tempMinY, tempMaxX, tempMaxY);
     } else {
         this->showString(x + 18, y, text.c_str(), !isFoused, tempMinX, tempMinY, tempMaxX, tempMaxY);
     }

@@ -1,7 +1,6 @@
 #include "KListSelect.h"
 #include <stdio.h>
 #include "KCheckBox.h"
-#include <QDebug>
 
 KListSelect::KListSelect(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     KWidget(x, y, w, h)

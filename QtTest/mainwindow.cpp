@@ -1,11 +1,11 @@
 #include "mainwindow.h"
-#include "../displayDrivers/DrawOnMemory.h"
+#include "../src/displayDrivers/DrawOnMemory.h"
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QStyle>
 #include <QGridLayout>
-#include "../TestUI/ButtonTest.h"
-#include "../TestUI/listtest.h"
+#include "../src/TestUI/ButtonTest.h"
+#include "../src/TestUI/listtest.h"
 #include <QDebug>
 
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
@@ -48,7 +48,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(displayTimer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
     displayTimer->start(100);
 
-    testUI = new ListTest();
+//    testUI = new ListTest();
+    testUI = new ButtonTest();
 
     this->setStyleSheet("background-color: #CDC5BF;");
 

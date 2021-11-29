@@ -16,34 +16,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ../KWidgets/KButton.cpp \
-    ../KWidgets/KCheckBox.cpp \
-    ../KWidgets/KImage.cpp \
-    ../KWidgets/KLabel.cpp \
-    ../KWidgets/KListSelect.cpp \
-    ../KWidgets/KWidget.cpp \
-    ../TestUI/ButtonTest.cpp \
-    ../TestUI/listtest.cpp \
-    ../displayDrivers/DrawOnMemory.cpp \
-    ../displayDrivers/font/ascii_font.c \
-    ../displayDrivers/font/sseriff.cpp \
+    ../src/KWidgets/KButton.cpp \
+    ../src/KWidgets/KCheckBox.cpp \
+    ../src/KWidgets/KImage.cpp \
+    ../src/KWidgets/KLabel.cpp \
+    ../src/KWidgets/KListSelect.cpp \
+    ../src/KWidgets/KWidget.cpp \
+    ../src/TestUI/ButtonTest.cpp \
+    ../src/TestUI/listtest.cpp \
+    ../src/displayDrivers/DrawOnMemory.cpp \
+    ../src/displayDrivers/font/ascii_font.c \
+    ../src/displayDrivers/font/sseriff.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    ../KWidgets/KButton.h \
-    ../KWidgets/KCheckBox.h \
-    ../KWidgets/KEvent.h \
-    ../KWidgets/KImage.h \
-    ../KWidgets/KLabel.h \
-    ../KWidgets/KListSelect.h \
-    ../KWidgets/KWidget.h \
-    ../TestUI/ButtonTest.h \
-    ../TestUI/listtest.h \
-    ../displayDrivers/DrawOnMemory.h \
-    ../displayDrivers/UIInterface.h \
-    ../displayDrivers/font/ascii_font.h \
-    ../displayDrivers/font/sseriff.h \
+    ../src/KWidgets/KButton.h \
+    ../src/KWidgets/KCheckBox.h \
+    ../src/KWidgets/KEvent.h \
+    ../src/KWidgets/KImage.h \
+    ../src/KWidgets/KLabel.h \
+    ../src/KWidgets/KListSelect.h \
+    ../src/KWidgets/KWidget.h \
+    ../src/TestUI/ButtonTest.h \
+    ../src/TestUI/listtest.h \
+    ../src/displayDrivers/DrawOnMemory.h \
+    ../src/displayDrivers/UIInterface.h \
+    ../src/displayDrivers/font/ascii_font.h \
+    ../src/displayDrivers/font/sseriff.h \
     mainwindow.h
 
 # Default rules for deployment.
