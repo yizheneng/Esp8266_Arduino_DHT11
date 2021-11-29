@@ -49,9 +49,9 @@ void DrawOnMemory::drawPoint(int16_t x,int16_t y,uint8_t t)
   drawPoint(x, y, t, minX, minY, maxX, maxY);
 }
 
-void DrawOnMemory::drawPoint(int16_t x, int16_t y, uint8_t t, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY)
+void DrawOnMemory::drawPoint(int16_t x, int16_t y, uint8_t mode, int16_t tempMinX, int16_t tempMinY, int16_t tempMaxX, int16_t tempMaxY)
 {
-    uint8_t i,m,n;
+    int16_t i,m,n;
     lastX = x;
     lastY = y;
 
@@ -68,9 +68,9 @@ void DrawOnMemory::drawPoint(int16_t x, int16_t y, uint8_t t, uint8_t tempMinX, 
     m=y%8;
     n=1<<m;
     uint8_t (*p)[8] = (uint8_t (*)[8])gramPtr;
-    if(t){p[x][i]|=n;}
-    else
-    {
+    if(mode) {
+      p[x][i]|=n;
+    } else {
       p[x][i]=~p[x][i];
       p[x][i]|=n;
       p[x][i]=~p[x][i];
@@ -173,13 +173,14 @@ void DrawOnMemory::showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode)
     showChar(x, y, chr, mode, minX, minY, maxX, maxY);
 }
 
-void DrawOnMemory::showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY)
+void DrawOnMemory::showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode, int16_t tempMinX, int16_t tempMinY, int16_t tempMaxX, int16_t tempMaxY)
 {
-    uint8_t i,m,temp,chr1;
-    uint8_t x0=x,y0=y;
+    int16_t i,m,temp,chr1;
+    int16_t x0=x,y0=y;
 
     if(isFontInFlash) {
       int tempFontWidth = fontWidth;
+
       if(chr < 0x7F) {
         tempFontWidth = fontWidth/2;
       }
@@ -196,8 +197,11 @@ void DrawOnMemory::showChar(int16_t x, int16_t y, uint16_t chr, uint8_t mode, ui
       for(int i=0; i < byteSize; i++) {
         temp = tempData[i];
         for(m=0;m<8;m++) {
-          if(temp&0x01) drawPoint(x, y, mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
-          else drawPoint(x, y, !mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+          if(temp&0x01)
+              drawPoint(x, y, mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+          else
+              drawPoint(x, y, !mode, tempMinX, tempMinY, tempMaxX, tempMaxY);
+
           temp>>=1;
           y++;
         }
@@ -264,7 +268,7 @@ void DrawOnMemory::showString(int16_t x, int16_t y, const char *chr, uint8_t mod
     showString(x, y, chr, mode, minX, minY, maxX, maxY);
 }
 
-void DrawOnMemory::showString(int16_t x, int16_t y, const char* chr, uint8_t mode, uint8_t tempMinX, uint8_t tempMinY, uint8_t tempMaxX, uint8_t tempMaxY)
+void DrawOnMemory::showString(int16_t x, int16_t y, const char* chr, uint8_t mode, int16_t tempMinX, int16_t tempMinY, int16_t tempMaxX, int16_t tempMaxY)
 {
     if(isFontInFlash) {
       uint8_t* next = (uint8_t*)chr;
