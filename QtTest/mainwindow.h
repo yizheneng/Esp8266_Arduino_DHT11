@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QPushButton>
-#include "../KWidgets/KWidget.h"
+#include "../src/KWidgets/KWidget.h"
 
 class MainWindow : public QWidget
 {

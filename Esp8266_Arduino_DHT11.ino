@@ -6,7 +6,8 @@
 #include "src/icon/weathericon.h"
 //#include "badapple.h"
 #include "src/button/button.h"
-#include "src/weather/weather.h"
+#include "src/utils/weather.h"
+#include "src/utils/news.h"
 #include "src/menu/MainUI.h"
 #include "src/menu/WeatherUI.h"
 #include "src/menu/SystemInfoUI.h"
@@ -44,6 +45,8 @@ WiFiUDP ntpUDP;
 WiFiClient weatherClient;
 NTPClient timeClient(ntpUDP, 8 * 60 * 60);
 Weather weather(weatherClient);
+WiFiClient newsClient;
+News news(newsClient);
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 
 char ssid[] = "Cnbot-Work";
@@ -90,6 +93,7 @@ void loop()
         count5S = 0;
         timeClient.update();
         weather.tickOnce();
+        news.tickOnce();
       }
 
       count5S ++;

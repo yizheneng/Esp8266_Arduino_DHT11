@@ -2,7 +2,7 @@
 #include <DHT.h>
 #include <time.h>
 #include <NTPClient.h>
-#include "../weather/weather.h"
+#include "../utils/weather.h"
 #include "../icon/weathericon.h"
 #include "../button/button.h"
 #include "../displayDrivers/font/sseriff.h"

@@ -11,8 +11,9 @@ public:
     ~ButtonTest();
 
     void tickOnce();
+    
 private:
-    /* data */
+    KLabel* testLabel;
 };
 
 

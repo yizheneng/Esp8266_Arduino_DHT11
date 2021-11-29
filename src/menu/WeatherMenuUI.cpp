@@ -1,7 +1,7 @@
 #include "WeatherMenuUI.h"
 #include <DHT.h>
 #include <NTPClient.h>
-#include "../weather/weather.h"
+#include "../utils/weather.h"
 #include "../icon/systemicon.h"
 #include "../button/button.h"
 #include "SystemInfoMenuUI.h"
