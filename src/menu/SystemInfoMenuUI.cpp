@@ -10,10 +10,10 @@ extern Button buttonUser;
 SystemInfoMenuUI::SystemInfoMenuUI() :
   UIInterface()
 {
-  painter.showPicture(40, 0, 48, 48, systemIcon48X48[SYSTEM_ICON_INFO]);
-  painter.setXY(30, 48);
-  painter.setFont(OLED_FONT_12X6);
-  painter.printf("System Info");
+  showPicture(40, 0, 48, 48, systemIcon48X48[SYSTEM_ICON_INFO]);
+  setXY(30, 48);
+  setFont(OLED_FONT_12X6);
+  printf("System Info");
 }
 
 void SystemInfoMenuUI::enter()

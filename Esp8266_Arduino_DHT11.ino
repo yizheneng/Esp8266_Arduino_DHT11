@@ -71,32 +71,30 @@ void setup()
   oled.begin();
   timeClient.begin();
 
-  // uiPointers[UI_INDEX_MAIN_UI] = new MainUI();
-  uiPointers[UI_INDEX_WEATHER_UI] = new WeatherUI();
-  uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
-  uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
-  uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
-  uiPointers[UI_INDEX_MENU_SETTINGS_UI] = new SettingsMenuUI();
-  uiPointers[UI_INDEX_SETTINGS_UI] = new SettingsUI();
+  uiPointers[UI_INDEX_MAIN_UI] = new MainUI();
+  // uiPointers[UI_INDEX_WEATHER_UI] = new WeatherUI();
+  // uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
+  // uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
+  // uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
+  // uiPointers[UI_INDEX_MENU_SETTINGS_UI] = new SettingsMenuUI();
+  // uiPointers[UI_INDEX_SETTINGS_UI] = new SettingsUI();
 }
 
 void loop()
 {
   int i = 0;
   int currentUIIndex = UI_INDEX_MAIN_UI;
-  ButtonTest* buttonTest = new ButtonTest();
+  uint32_t count100msCount = millis();
 
   while (1)  {
     if (WiFi.status() == WL_CONNECTED) {
-      static int count5S = 500;
-      if(count5S > 100) {
-        count5S = 0;
+      static uint32_t count5S = millis();
+      if((millis() - count5S) > 5000) {
+        count5S = millis();
         timeClient.update();
         weather.tickOnce();
         news.tickOnce();
       }
-
-      count5S ++;
     } else {
       static bool connectFlag = false;
       if (!connectFlag) {
@@ -115,22 +113,28 @@ void loop()
     }
 
   TICK_ONCE:
-    // int8_t temp = uiPointers[currentUIIndex]->tickOnce();
-    // if (temp >= 0) { // 大于0需要切换界面
-    //   if (temp < UI_INDEX_MAX) {
-    //     Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
-    //     currentUIIndex = temp;
-    //     uiPointers[currentUIIndex]->enter();
-    //     goto TICK_ONCE;
-    //   }
-    // }
+    int8_t temp = uiPointers[currentUIIndex]->tickOnce();
+    if (temp >= 0) { // 大于0需要切换界面
+      if (temp < UI_INDEX_MAX) {
+        Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
+        currentUIIndex = temp;
+        uiPointers[currentUIIndex]->enter();
+        goto TICK_ONCE;
+      }
+    }
 
-    buttonTest->tickOnce();
-    buttonTest->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 10)); // 滴答信号输入
-    buttonTest->event(K_EVENT(K_EVENT_CLASS_USER_BUTTON, buttonUser.pressStatus())); // 按钮信号输入
+    // buttonTest->tickOnce();
+    uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 100)); // 滴答信号输入
+    uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_USER_BUTTON, buttonUser.pressStatus())); // 按钮信号输入
 
     oled.syncDisplay((uint8_t*)OLED_GRAM);
 
-    delay(10);
+#define MAIN_LOOP_WAIT_TIME 100 // 100ms
+    uint32_t delayVal = (MAIN_LOOP_WAIT_TIME - (millis() - count100msCount)); // 计算需要等待的时间
+
+    if(delayVal < MAIN_LOOP_WAIT_TIME) {
+      delay(delayVal);
+    }
+    count100msCount = millis();
   }
 }

@@ -18,25 +18,25 @@ SystemInfoUI::SystemInfoUI() :
 
 void SystemInfoUI::enter()
 {
-  painter.clearDisplay();
-  painter.setXY(0, 0);
-  painter.setFont(OLED_FONT_12X6);
-  painter.setDisplayMode(0);
-  painter.printf("     System Info     ");
+  clearDisplay();
+  setXY(0, 0);
+  setFont(OLED_FONT_12X6);
+  setDisplayMode(0);
+  printf("     System Info     ");
 
-  painter.setFont(OLED_FONT_8X6);
-  painter.setDisplayMode(1);
-  painter.setXY(0, 18);
-  painter.printf("Model:ESP12(esp8266)\r\n");
-  painter.printf("Flash Size:32Mbit\r\n");
-  painter.printf("Memory Size:4Mbit\r\n");
+  setFont(OLED_FONT_8X6);
+  setDisplayMode(1);
+  setXY(0, 18);
+  printf("Model:ESP12(esp8266)\r\n");
+  printf("Flash Size:32Mbit\r\n");
+  printf("Memory Size:4Mbit\r\n");
 }
 
 int8_t SystemInfoUI::tickOnce()
 {
-  painter.setXY(0, 42);
-  painter.printf("SSID:%s\r\n", WiFi.SSID().c_str());
-  painter.printf("IP:%s", WiFi.localIP().toString().c_str());
+  setXY(0, 42);
+  printf("SSID:%s\r\n", WiFi.SSID().c_str());
+  printf("IP:%s", WiFi.localIP().toString().c_str());
 
   if(buttonC.isClicked()) {
     return UI_INDEX_MENU_SYSTEM_INFO;

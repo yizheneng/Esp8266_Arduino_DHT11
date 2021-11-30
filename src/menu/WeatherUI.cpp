@@ -24,36 +24,36 @@ void WeatherUI::enter()
 
 int8_t WeatherUI::tickOnce()
 {
-  painter.clearDisplay();
-  painter.setXY(0, 0);
-  painter.setFont(OLED_FONT_12X6);
-  painter.setDisplayMode(0);
-  painter.printf("       Weather       ");
+  clearDisplay();
+  setXY(0, 0);
+  setFont(OLED_FONT_12X6);
+  setDisplayMode(0);
+  printf("       Weather       ");
 
   if(weather.isUpdated()) {
-    painter.showPictureInFlash(0, 16, 32, 32, picture32X32[weather.getWeathers()[0].weatherIconCode]);
-    painter.showPictureInFlash(32 + 16, 16, 32, 32, picture32X32[weather.getWeathers()[1].weatherIconCode]);
-    painter.showPictureInFlash(32 + 16 + 32 + 16, 16, 32, 32, picture32X32[weather.getWeathers()[2].weatherIconCode]);
+    showPictureInFlash(0, 16, 32, 32, picture32X32[weather.getWeathers()[0].weatherIconCode]);
+    showPictureInFlash(32 + 16, 16, 32, 32, picture32X32[weather.getWeathers()[1].weatherIconCode]);
+    showPictureInFlash(32 + 16 + 32 + 16, 16, 32, 32, picture32X32[weather.getWeathers()[2].weatherIconCode]);
 
-    painter.setDisplayMode(1);
-    painter.setFont(OLED_FONT_8X6);
-    painter.setXY(0, 48);
-    painter.printf("L:%d\r\nH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
+    setDisplayMode(1);
+    setFont(OLED_FONT_8X6);
+    setXY(0, 48);
+    printf("L:%d\r\nH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
 
-    painter.setXY(32 + 16, 48);
-    painter.printf("L:%d", weather.getWeathers()[1].lowTemp);
-    painter.setXY(32 + 16, 56);
-    painter.printf("H:%d", weather.getWeathers()[1].highTemp);
+    setXY(32 + 16, 48);
+    printf("L:%d", weather.getWeathers()[1].lowTemp);
+    setXY(32 + 16, 56);
+    printf("H:%d", weather.getWeathers()[1].highTemp);
 
-    painter.setXY(32 + 16 + 32 + 16, 48);
-    painter.printf("L:%d", weather.getWeathers()[2].lowTemp);
-    painter.setXY(32 + 16 + 32 + 16, 56);
-    painter.printf("H:%d", weather.getWeathers()[2].highTemp);
+    setXY(32 + 16 + 32 + 16, 48);
+    printf("L:%d", weather.getWeathers()[2].lowTemp);
+    setXY(32 + 16 + 32 + 16, 56);
+    printf("H:%d", weather.getWeathers()[2].highTemp);
   } else {
-    painter.setDisplayMode(1);
-    painter.setXY(0, 16);
-    painter.setFont(OLED_FONT_24X12);
-    painter.showString("Waiting...");
+    setDisplayMode(1);
+    setXY(0, 16);
+    setFont(OLED_FONT_24X12);
+    showString("Waiting...");
   }
   
   switch (buttonUser.pressStatus())

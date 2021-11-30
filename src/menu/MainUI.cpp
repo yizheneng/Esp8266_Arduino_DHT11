@@ -3,6 +3,7 @@
 #include <time.h>
 #include <NTPClient.h>
 #include "../utils/weather.h"
+#include "../utils/news.h"
 #include "../icon/weathericon.h"
 #include "../button/button.h"
 #include "../displayDrivers/font/sseriff.h"
@@ -11,6 +12,7 @@
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
+extern News news;
 extern Button buttonL;
 extern Button buttonC;
 extern Button buttonR;
@@ -18,7 +20,7 @@ extern Button buttonUser;
 
 // 主界面
 MainUI::MainUI() :
-  KWidget(0, 0, 128, 64)
+  UIInterface(0, 0, 128, 64)
 {
   timeLabel = new KLabel("00:00:00",   48, 0, 8*16, 16);
   dateLabel = new KLabel("1990-00-00", 40, 16, 8*16, 16);
@@ -37,20 +39,22 @@ MainUI::MainUI() :
   highTempLabel = new KLabel("00", 24 + 64, 32, 2*16, 16);
   this->addChild(highTempLabel);
 
-  this->addChild(new KLabel("温:", 0, 48, 16*2, 16));
-  realTempLabel = new KLabel("00", 24, 48, 2*16, 16);
-  this->addChild(realTempLabel);
+  // this->addChild(new KLabel("温:", 0, 48, 16*2, 16));
+  // realTempLabel = new KLabel("00", 24, 48, 2*16, 16);
+  // this->addChild(realTempLabel);
 
-  this->addChild(new KLabel("湿:", 64, 48, 16*2, 16));
-  realHumLabel = new KLabel("00", 24 + 64, 48, 2*16, 16);
-  this->addChild(realHumLabel);
+  // this->addChild(new KLabel("湿:", 64, 48, 16*2, 16));
+  // realHumLabel = new KLabel("00", 24 + 64, 48, 2*16, 16);
+  // this->addChild(realHumLabel);
 
-  this->addChild(new KButton("Push", 20, 20, 40, 50));
+  newsLabel = new KLabel("", 0, 48, 128, 16);
+  newsLabel->setScroll(true);
+  this->addChild(newsLabel);
 }
 
 void MainUI::enter()
 {
-  
+  clearDisplay();
 }
 
 int8_t MainUI::tickOnce()
@@ -76,23 +80,29 @@ int8_t MainUI::tickOnce()
   sprintf(printBuf, "%d", weather.getWeathers()[0].highTemp);
   highTempLabel->setText(printBuf);
 
-  sprintf(printBuf, "%d", (int)dht.readTemperature());
-  realTempLabel->setText(printBuf);
+  // sprintf(printBuf, "%d", (int)dht.readTemperature());
+  // realTempLabel->setText(printBuf);
 
-  sprintf(printBuf, "%d", (int)dht.readHumidity());
-  realHumLabel->setText(printBuf);
+  // sprintf(printBuf, "%d", (int)dht.readHumidity());
+  // realHumLabel->setText(printBuf);
+
+  static uint32_t count5S = millis();
+  if((millis() - count5S) > 20000) {
+    count5S = millis();
+    newsLabel->setText(news.getNextNews());
+  }
 
   this->paint();
 
-  switch (buttonUser.pressStatus())
-  {
-  case PRESS_STATUS_SHORT_PRESS:
-    return UI_INDEX_MENU_WEATHER;
-    break;
-  case PRESS_STATUS_LONG_PRESS:
-    return UI_INDEX_MENU_SETTINGS_UI;
-    break;
-  }
+  // switch (buttonUser.pressStatus())
+  // {
+  // case PRESS_STATUS_SHORT_PRESS:
+  //   return UI_INDEX_MENU_WEATHER;
+  //   break;
+  // case PRESS_STATUS_LONG_PRESS:
+  //   return UI_INDEX_MENU_SETTINGS_UI;
+  //   break;
+  // }
 
   return -1;
 }

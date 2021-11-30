@@ -14,11 +14,11 @@ SettingsUI::SettingsUI() :
 
 void SettingsUI::enter()
 {
-  painter.clearDisplay();
-  painter.setXY(0, 0);
-  painter.setFont(OLED_FONT_12X6);
-  painter.setDisplayMode(0);
-  painter.printf("      Settings     ");
+  clearDisplay();
+  setXY(0, 0);
+  setFont(OLED_FONT_12X6);
+  setDisplayMode(0);
+  printf("      Settings     ");
 }
 
 int8_t SettingsUI::tickOnce()
@@ -63,14 +63,14 @@ int8_t SettingsUI::tickOnce()
 
 void SettingsUI::updateMenu(int currentIdex)
 {
-  painter.setFont(OLED_FONT_8X6);
-  painter.setDisplayMode(1);
-  painter.setXY(0, 18);
-  painter.printf("  Wifi Settings\r\n");
-  painter.printf("  Time Settings\r\n");
-  painter.printf("  Local Settings\r\n");
-  painter.printf("  Exit\r\n");
+  setFont(OLED_FONT_8X6);
+  setDisplayMode(1);
+  setXY(0, 18);
+  printf("  Wifi Settings\r\n");
+  printf("  Time Settings\r\n");
+  printf("  Local Settings\r\n");
+  printf("  Exit\r\n");
 
-  painter.drawCircle(5, 18 + currentIdex * 8 + 4, 3);
+  drawCircle(5, 18 + currentIdex * 8 + 4, 3);
 }
 

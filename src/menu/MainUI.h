@@ -1,11 +1,12 @@
 #ifndef _MAIN_UI_H_
 #define _MAIN_UI_H_
+#include "../displayDrivers/UIInterface.h"
 #include "../KWidgets/KWidget.h"
 #include "../KWidgets/KLabel.h"
 #include "../KWidgets/KImage.h"
 #include "../KWidgets/KButton.h"
 
-class MainUI : public KWidget {
+class MainUI : public UIInterface {
 public:
   MainUI();
 
@@ -18,6 +19,7 @@ private:
   KLabel* highTempLabel;
   KLabel* realTempLabel;
   KLabel* realHumLabel;
+  KLabel* newsLabel;
 
   KImage* weatherIcon;
 };

@@ -18,10 +18,10 @@ extern Button buttonUser;
 WeatherMenuUI::WeatherMenuUI() :
   UIInterface()
 {
-  painter.showPicture(40, 0, 48, 48, systemIcon48X48[SYSTEM_ICON_WEATHER]);
-  painter.setXY(40, 48);
-  painter.setFont(OLED_FONT_12X6);
-  painter.printf("Weather");
+  showPicture(40, 0, 48, 48, systemIcon48X48[SYSTEM_ICON_WEATHER]);
+  setXY(40, 48);
+  setFont(OLED_FONT_12X6);
+  printf("Weather");
 }
 
 void WeatherMenuUI::enter()
