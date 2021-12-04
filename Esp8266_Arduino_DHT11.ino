@@ -72,12 +72,12 @@ void setup()
   timeClient.begin();
 
   uiPointers[UI_INDEX_MAIN_UI] = new MainUI();
-  // uiPointers[UI_INDEX_WEATHER_UI] = new WeatherUI();
-  // uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
-  // uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
-  // uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
-  // uiPointers[UI_INDEX_MENU_SETTINGS_UI] = new SettingsMenuUI();
-  // uiPointers[UI_INDEX_SETTINGS_UI] = new SettingsUI();
+  uiPointers[UI_INDEX_WEATHER_UI] = new WeatherUI();
+  uiPointers[UI_INDEX_SYSTEM_INFO_UI] = new SystemInfoUI();
+  uiPointers[UI_INDEX_MENU_SYSTEM_INFO] = new SystemInfoMenuUI();
+  uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
+  uiPointers[UI_INDEX_MENU_SETTINGS_UI] = new SettingsMenuUI();
+  uiPointers[UI_INDEX_SETTINGS_UI] = new SettingsUI();
 }
 
 void loop()
@@ -86,6 +86,7 @@ void loop()
   int currentUIIndex = UI_INDEX_MAIN_UI;
   uint32_t count100msCount = millis();
 
+  uiPointers[currentUIIndex]->enter();
   while (1)  {
     if (WiFi.status() == WL_CONNECTED) {
       static uint32_t count5S = millis();

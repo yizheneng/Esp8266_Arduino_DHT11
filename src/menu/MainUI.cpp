@@ -8,11 +8,11 @@
 #include "../button/button.h"
 #include "../displayDrivers/font/sseriff.h"
 #include "../displayDrivers/UIInterface.h"
+#include "NewsLabel.h"
 
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
-extern News news;
 extern Button buttonL;
 extern Button buttonC;
 extern Button buttonR;
@@ -31,12 +31,12 @@ MainUI::MainUI() :
   this->addChild(timeLabel);
   this->addChild(dateLabel);
 
-  this->addChild(new KLabel("低:", 0, 32, 16*2, 16));
-  lowTempLabel = new KLabel("00", 24, 32, 2*16, 16);
+  this->addChild(new KLabel("低:", 0, 31, 16*2, 16));
+  lowTempLabel = new KLabel("00", 24, 31, 2*16, 16);
   this->addChild(lowTempLabel);
 
-  this->addChild(new KLabel("高:", 64, 32, 16*2, 16));
-  highTempLabel = new KLabel("00", 24 + 64, 32, 2*16, 16);
+  this->addChild(new KLabel("高:", 64, 31, 16*2, 16));
+  highTempLabel = new KLabel("00", 24 + 64, 31, 2*16, 16);
   this->addChild(highTempLabel);
 
   // this->addChild(new KLabel("温:", 0, 48, 16*2, 16));
@@ -47,7 +47,7 @@ MainUI::MainUI() :
   // realHumLabel = new KLabel("00", 24 + 64, 48, 2*16, 16);
   // this->addChild(realHumLabel);
 
-  newsLabel = new KLabel("", 0, 48, 128, 16);
+  newsLabel = new NewsLabel(0, 47, 128, 16);
   newsLabel->setScroll(true);
   this->addChild(newsLabel);
 }
@@ -85,12 +85,6 @@ int8_t MainUI::tickOnce()
 
   // sprintf(printBuf, "%d", (int)dht.readHumidity());
   // realHumLabel->setText(printBuf);
-
-  static uint32_t count5S = millis();
-  if((millis() - count5S) > 20000) {
-    count5S = millis();
-    newsLabel->setText(news.getNextNews());
-  }
 
   this->paint();
 

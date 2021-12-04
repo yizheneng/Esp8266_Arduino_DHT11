@@ -2,7 +2,7 @@
 #include <Arduino_JSON.h>
 
 #define NEWS_ADDR   "v.juhe.cn"
-#define NEWS_PARMAS "/toutiao/index?type=&page=&page_size=10&is_filter=&key=bd3299d85f864648cf33ddaacb8cf7d2"
+#define NEWS_PARMAS "/toutiao/index?type=guoji&page=&page_size=10&is_filter=&key=bd3299d85f864648cf33ddaacb8cf7d2"
 
 News::News(Client& aClient) :
   client(aClient, NEWS_ADDR),
