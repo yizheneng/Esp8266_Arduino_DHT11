@@ -49,6 +49,7 @@ WiFiClient newsClient;
 News news(newsClient);
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 uint8_t cpuUsage;
+int nextWidget = -1;
 
 char ssid[] = "Cnbot_2.4G";
 char pass[] = "Cnbot001";
@@ -101,7 +102,7 @@ void loop()
     } else {
       static bool connectFlag = false;
       if (!connectFlag) {
-        byte numSsid = WiFi.scanNetworks();
+        int numSsid = WiFi.scanNetworks();
         for (int i = 0; i < numSsid; i++) {
           Serial.println(WiFi.SSID(i));
           if (WiFi.SSID(i) == ssid) {
@@ -121,20 +122,21 @@ void loop()
     if(buttonC.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
     uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 100)); // 滴答信号输入
 
-    int8_t temp = uiPointers[currentUIIndex]->getNextWidget();
-    if (temp >= 0) { // 大于0需要切换界面
-      if (temp < UI_INDEX_MAX) {
-        Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
-        currentUIIndex = temp;
+    if (nextWidget >= 0) { // 大于0需要切换界面
+      if (nextWidget < UI_INDEX_MAX) {
+        Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, nextWidget);
+        currentUIIndex = nextWidget;
         uiPointers[currentUIIndex]->enter();
         goto TICK_ONCE;
       }
     }
 
+    Serial.print("Sync display");
     oled.syncDisplay((uint8_t*)OLED_GRAM);
+    Serial.print("Sync display 1");
 
 #define MAIN_LOOP_WAIT_TIME 100 // 100ms
-    int32_t delayVal = (MAIN_LOOP_WAIT_TIME - (millis() - count100msCount)); // 计算需要等待的时间
+    int delayVal = (MAIN_LOOP_WAIT_TIME - (millis() - count100msCount)); // 计算需要等待的时间
     cpuUsage = (100 - (double)delayVal * 100 / MAIN_LOOP_WAIT_TIME);
 
     if(delayVal < 0) {

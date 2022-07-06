@@ -16,12 +16,12 @@ enum  UIIndex {
 };
 
 extern uint8_t OLED_GRAM[144][8];
+extern int nextWidget; // 下一个要切入的界面,-1:不需要切换界面
 
 class UIInterface : public KWidget {
 public:
   UIInterface() :
-    KWidget(0, 0, 128, 64),
-    nextWidget(-1) {
+    KWidget(0, 0, 128, 64) {
   };
 
   UIInterface(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
@@ -35,13 +35,6 @@ public:
   uint8_t* getGRam() {     // 获取当前页的页面缓存
     return (uint8_t*)OLED_GRAM;
   }
-
-  int8_t getNextWidget() {
-    return nextWidget;
-  }
-
-protected:
-  int8_t nextWidget; // 下一个要切入的界面,-1:不需要切换界面
 };
 
 #endif

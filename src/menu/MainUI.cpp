@@ -54,12 +54,12 @@ int MainUI::event(const KEventCode& event)
   case K_EVENT_CLASS_KEY:
     if(K_EVENT_DATA(event) == K_EVENT_KEY_LEFT) {
       nextWidget = UI_INDEX_MENU_WEATHER;
-      break;
+      return 0;
     }
 
     if(K_EVENT_DATA(event) == K_EVENT_KEY_RIGHT) {
       nextWidget = UI_INDEX_MENU_SYSTEM_INFO;
-      break;
+      return 0;
     }
     break;
   case K_EVENT_CLASS_TICK_ONCE:
