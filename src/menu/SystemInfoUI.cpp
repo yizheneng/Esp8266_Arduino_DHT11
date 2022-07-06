@@ -56,5 +56,5 @@ void SystemInfoUI::updateDisplay()
   setXY(0, 42 + 8);
   printf("IP:%s", WiFi.localIP().toString().c_str());
   setXY(0, 42 + 8 + 8);
-  printf("CPU:%d", cpuUsage);
+  printf("CPU:%d    ", cpuUsage);
 }

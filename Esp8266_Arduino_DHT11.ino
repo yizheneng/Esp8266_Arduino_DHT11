@@ -141,6 +141,7 @@ void loop()
       Serial.print("Cpu 100%  delay value");
       Serial.print(delayVal, 10);
       Serial.println("");
+      ESP.wdtFeed();
       continue;
     } else {
 
