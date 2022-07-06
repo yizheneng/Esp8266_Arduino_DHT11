@@ -16,7 +16,7 @@ extern Weather weather;
 extern Button buttonL;
 extern Button buttonC;
 extern Button buttonR;
-extern Button buttonUser;
+// extern Button buttonUser;
 
 // 主界面
 MainUI::MainUI() :
@@ -24,28 +24,16 @@ MainUI::MainUI() :
 {
   timeLabel = new KLabel("00:00:00",   48, 0, 8*16, 16);
   dateLabel = new KLabel("1990-00-00", 40, 16, 8*16, 16);
+
+  tempAndHumLabel = new KLabel("", 0, 31, 128, 16);
+  tempAndHumLabel->setScroll(true);
   
   weatherIcon = new KImage(0, 0, 32, 32);
  
   this->addChild(weatherIcon);
   this->addChild(timeLabel);
   this->addChild(dateLabel);
-
-  this->addChild(new KLabel("低:", 0, 31, 16*2, 16));
-  lowTempLabel = new KLabel("00", 24, 31, 2*16, 16);
-  this->addChild(lowTempLabel);
-
-  this->addChild(new KLabel("高:", 64, 31, 16*2, 16));
-  highTempLabel = new KLabel("00", 24 + 64, 31, 2*16, 16);
-  this->addChild(highTempLabel);
-
-  // this->addChild(new KLabel("温:", 0, 48, 16*2, 16));
-  // realTempLabel = new KLabel("00", 24, 48, 2*16, 16);
-  // this->addChild(realTempLabel);
-
-  // this->addChild(new KLabel("湿:", 64, 48, 16*2, 16));
-  // realHumLabel = new KLabel("00", 24 + 64, 48, 2*16, 16);
-  // this->addChild(realHumLabel);
+  this->addChild(tempAndHumLabel);
 
   newsLabel = new NewsLabel(0, 47, 128, 16);
   newsLabel->setScroll(true);
@@ -54,10 +42,35 @@ MainUI::MainUI() :
 
 void MainUI::enter()
 {
+  UIInterface::enter();
+  Serial.println("Test 5!");
   clearDisplay();
 }
 
-int8_t MainUI::tickOnce()
+int MainUI::event(const KEventCode& event)
+{
+  switch (K_EVENT_CLASS(event))
+  {
+  case K_EVENT_CLASS_KEY:
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_LEFT) {
+      nextWidget = UI_INDEX_MENU_WEATHER;
+      break;
+    }
+
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_RIGHT) {
+      nextWidget = UI_INDEX_MENU_SYSTEM_INFO;
+      break;
+    }
+    break;
+  case K_EVENT_CLASS_TICK_ONCE:
+    updateDisplay();
+    break;
+  }
+
+  return KWidget::event(event);
+}
+
+void MainUI::updateDisplay()
 {
   if(weather.isUpdated()) {
     weatherIcon->setImage((uint8_t*)picture32X32[weather.getWeathers()[0].weatherIconCode], true);
@@ -67,36 +80,18 @@ int8_t MainUI::tickOnce()
   struct tm *info;
   info = localtime( &rawtime );
   
-  char printBuf[20];
+  char printBuf[40];
   sprintf(printBuf, "%02d:%02d:%02d", info->tm_hour, info->tm_min, info->tm_sec);            // 时间显示
   timeLabel->setText(printBuf);
 
   sprintf(printBuf, "%04d-%02d-%02d", info->tm_year + 1900, info->tm_mon + 1, info->tm_mday); // 温度显示
   dateLabel->setText(printBuf);
-  
-  sprintf(printBuf, "%d", weather.getWeathers()[0].lowTemp);
-  lowTempLabel->setText(printBuf);
 
-  sprintf(printBuf, "%d", weather.getWeathers()[0].highTemp);
-  highTempLabel->setText(printBuf);
-
-  // sprintf(printBuf, "%d", (int)dht.readTemperature());
-  // realTempLabel->setText(printBuf);
-
-  // sprintf(printBuf, "%d", (int)dht.readHumidity());
-  // realHumLabel->setText(printBuf);
+  sprintf(printBuf, "高温:%2d 低温:%2d 温度:%2d 湿度:%2d      ", weather.getWeathers()[0].highTemp, 
+                                                          weather.getWeathers()[0].lowTemp,
+                                                          (int)dht.readTemperature(), 
+                                                          (int)dht.readHumidity());
+  tempAndHumLabel->setText(printBuf);
 
   this->paint();
-
-  // switch (buttonUser.pressStatus())
-  // {
-  // case PRESS_STATUS_SHORT_PRESS:
-  //   return UI_INDEX_MENU_WEATHER;
-  //   break;
-  // case PRESS_STATUS_LONG_PRESS:
-  //   return UI_INDEX_MENU_SETTINGS_UI;
-  //   break;
-  // }
-
-  return -1;
 }

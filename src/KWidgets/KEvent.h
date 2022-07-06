@@ -29,17 +29,4 @@ enum KEventUserButton {
   K_EVENT_USER_BUTTON_LONG_PRESS,
 };
 
-// class KEvent
-// {
-// public:
-//     KEvent(KEventCode code);
-//     ~KEvent();
-
-//     uint32_t getClass();
-
-//     uint32_t getData();
-// private:
-//     KEventCode code; 
-// };
-
 #endif

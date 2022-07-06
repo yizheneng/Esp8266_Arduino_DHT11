@@ -40,7 +40,16 @@ void KWidget::addChild(KWidget* child)
 
 int KWidget::event(const KEventCode& event)
 {
+    return runChildEvent(event);
+}
+
+int KWidget::runChildEvent(const KEventCode& event)
+{
     if(!isVisible) {
+        return 0;
+    }
+
+    if(0 == childs[0]) {
         return 0;
     }
 

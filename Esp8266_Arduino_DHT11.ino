@@ -39,8 +39,8 @@
  * 
 */
 
-DHT dht(D1, DHT11);
-SSD1306SPI oled(D6, D4, D2, D0);
+DHT dht(D4, DHT11);
+SSD1306SPI oled(D0, D5, D7, D6);
 WiFiUDP ntpUDP;
 WiFiClient weatherClient;
 NTPClient timeClient(ntpUDP, 8 * 60 * 60);
@@ -48,17 +48,18 @@ Weather weather(weatherClient);
 WiFiClient newsClient;
 News news(newsClient);
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
+uint8_t cpuUsage;
 
-char ssid[] = "Cnbot-Work";
+char ssid[] = "Cnbot_2.4G";
 char pass[] = "Cnbot001";
 
 char ssid1[] = "2291";
 char pass1[] = "2911.2911";
 
-Button buttonL(D6);
-Button buttonC(D7);
-Button buttonR(D5);
-Button buttonUser(D3);
+Button buttonL(D1);
+Button buttonC(D3);
+Button buttonR(D8);
+// Button buttonUser(D3);
 
 UIInterface *uiPointers[UI_INDEX_MAX];
 
@@ -84,10 +85,11 @@ void loop()
 {
   int i = 0;
   int currentUIIndex = UI_INDEX_MAIN_UI;
-  uint32_t count100msCount = millis();
+  uint32_t count100msCount = 0;
 
   uiPointers[currentUIIndex]->enter();
   while (1)  {
+    count100msCount = millis();
     if (WiFi.status() == WL_CONNECTED) {
       static uint32_t count5S = millis();
       if((millis() - count5S) > 5000) {
@@ -114,7 +116,12 @@ void loop()
     }
 
   TICK_ONCE:
-    int8_t temp = uiPointers[currentUIIndex]->tickOnce();
+    if(buttonL.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_LEFT));
+    // if(buttonR.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
+    if(buttonC.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
+    uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 100)); // 滴答信号输入
+
+    int8_t temp = uiPointers[currentUIIndex]->getNextWidget();
     if (temp >= 0) { // 大于0需要切换界面
       if (temp < UI_INDEX_MAX) {
         Serial.printf("Switch to:%d - %d\r\n", currentUIIndex, temp);
@@ -124,14 +131,20 @@ void loop()
       }
     }
 
-    // buttonTest->tickOnce();
-    uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 100)); // 滴答信号输入
-    uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_USER_BUTTON, buttonUser.pressStatus())); // 按钮信号输入
-
     oled.syncDisplay((uint8_t*)OLED_GRAM);
 
 #define MAIN_LOOP_WAIT_TIME 100 // 100ms
-    uint32_t delayVal = (MAIN_LOOP_WAIT_TIME - (millis() - count100msCount)); // 计算需要等待的时间
+    int32_t delayVal = (MAIN_LOOP_WAIT_TIME - (millis() - count100msCount)); // 计算需要等待的时间
+    cpuUsage = (100 - (double)delayVal * 100 / MAIN_LOOP_WAIT_TIME);
+
+    if(delayVal < 0) {
+      Serial.print("Cpu 100%  delay value");
+      Serial.print(delayVal, 10);
+      Serial.println("");
+      continue;
+    } else {
+
+    }
 
     if(delayVal < MAIN_LOOP_WAIT_TIME) {
       delay(delayVal);

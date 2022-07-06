@@ -8,7 +8,7 @@
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
-extern Button buttonUser;
+// extern Button buttonUser;
 
 
 // 主界面
@@ -19,10 +19,28 @@ WeatherUI::WeatherUI() :
 
 void WeatherUI::enter()
 {
-  
+    UIInterface::enter();
 }
 
-int8_t WeatherUI::tickOnce()
+int WeatherUI::event(const KEventCode& event)
+{
+  switch (K_EVENT_CLASS(event))
+  {
+  case K_EVENT_CLASS_KEY:
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_OK) {
+      nextWidget = UI_INDEX_MENU_WEATHER;
+      break;
+    }
+    break;
+  case K_EVENT_CLASS_TICK_ONCE:
+    updateDisplay();
+    break;
+  }
+
+  return KWidget::event(event);
+}
+
+void WeatherUI::updateDisplay()
 {
   clearDisplay();
   setXY(0, 0);
@@ -55,13 +73,4 @@ int8_t WeatherUI::tickOnce()
     setFont(OLED_FONT_24X12);
     showString("Waiting...");
   }
-  
-  switch (buttonUser.pressStatus())
-  {
-  case PRESS_STATUS_SHORT_PRESS:
-    return UI_INDEX_MENU_WEATHER;
-    break;
-  }
-
-  return -1;
 }

@@ -20,19 +20,28 @@ extern uint8_t OLED_GRAM[144][8];
 class UIInterface : public KWidget {
 public:
   UIInterface() :
-    KWidget(0, 0, 128, 64) {
+    KWidget(0, 0, 128, 64),
+    nextWidget(-1) {
   };
 
   UIInterface(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     KWidget(x, y, w, h) {
   };
 
-  virtual void enter() = 0;      // 切换界面时，会调用此函数
-  virtual int8_t tickOnce() = 0; // 定时调用该接口用于刷新界面逻辑,当前界面需要退出时，将返回要进入的界面ID即可，不需退出时，则返回-1
+  virtual void enter() { // 切换界面时，会调用此函数
+    nextWidget = -1;
+  }      
 
   uint8_t* getGRam() {     // 获取当前页的页面缓存
     return (uint8_t*)OLED_GRAM;
   }
+
+  int8_t getNextWidget() {
+    return nextWidget;
+  }
+
+protected:
+  int8_t nextWidget; // 下一个要切入的界面,-1:不需要切换界面
 };
 
 #endif

@@ -38,6 +38,8 @@ public:
     uint8_t childNum();
 
     virtual int event(const KEventCode&);
+
+    int runChildEvent(const KEventCode&);
     
     bool isFoused;
 protected:

@@ -14,6 +14,8 @@ SettingsUI::SettingsUI() :
 
 void SettingsUI::enter()
 {
+  UIInterface::enter();
+
   clearDisplay();
   setXY(0, 0);
   setFont(OLED_FONT_12X6);
@@ -21,16 +23,37 @@ void SettingsUI::enter()
   printf("      Settings     ");
 }
 
-int8_t SettingsUI::tickOnce()
+int SettingsUI::event(const KEventCode& event)
 {
-  if(buttonR.isClicked()) {
-    state ++;
+  switch (K_EVENT_CLASS(event))
+  {
+  case K_EVENT_CLASS_KEY:
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_LEFT) {
+      state --;
+    }
+
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_RIGHT) {
+      state ++;
+    }
+
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_OK) {
+      if( state == SETTINGS_UI_STATE_EXIT) {
+        nextWidget = UI_INDEX_MENU_SETTINGS_UI;
+        break;
+      }
+    }
+
+    updateDisplay();
+    break;
+  case K_EVENT_CLASS_TICK_ONCE:
+    break;
   }
 
-  if(buttonL.isClicked()) {
-    state --;
-  }
+  return KWidget::event(event);
+}
 
+void SettingsUI::updateDisplay()
+{
   if(state > (SETTINGS_UI_STATE_MAX - 1)) {
     state = 0;
   }
@@ -38,27 +61,8 @@ int8_t SettingsUI::tickOnce()
   if(state < 0) {
     state = (SETTINGS_UI_STATE_MAX - 1);
   }
-
-  if(buttonC.isClicked()) {
-    switch (state)
-    {
-    case SETTINGS_UI_STATE_WIFI_SETTINGS:
-      break;
-    case SETTINGS_UI_STATE_TIME_SETTINGS:
-      break;
-    case SETTINGS_UI_STATE_LOCAL_SETTINGS:
-      break;
-    case SETTINGS_UI_STATE_EXIT:
-      return UI_INDEX_MENU_SETTINGS_UI;
-      break;
-    default:
-      break;
-    }
-  }
   
-
   updateMenu(state);
-  return -1;
 }
 
 void SettingsUI::updateMenu(int currentIdex)
@@ -67,8 +71,11 @@ void SettingsUI::updateMenu(int currentIdex)
   setDisplayMode(1);
   setXY(0, 18);
   printf("  Wifi Settings\r\n");
+  setXY(0, 18 + 8);
   printf("  Time Settings\r\n");
+  setXY(0, 18 + 8 + 8);
   printf("  Local Settings\r\n");
+  setXY(0, 18 + 8 + 8 + 8);
   printf("  Exit\r\n");
 
   drawCircle(5, 18 + currentIdex * 8 + 4, 3);

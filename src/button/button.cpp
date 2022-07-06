@@ -6,7 +6,7 @@ Button::Button(int pin) :
   lastResult(false),
   lastReadTime(0)
 {
-  pinMode(pin, INPUT);
+  pinMode(pin, INPUT_PULLUP);
   // digitalWrite(pin, HIGH);
 }
 
