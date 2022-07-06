@@ -3,16 +3,11 @@
 #include <NTPClient.h>
 #include "../utils/weather.h"
 #include "../icon/systemicon.h"
-#include "../button/button.h"
 #include "SystemInfoMenuUI.h"
 
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
-extern Button buttonL;
-extern Button buttonC;
-extern Button buttonR;
-// extern Button buttonUser;
 
 // 天气菜单
 WeatherMenuUI::WeatherMenuUI() :

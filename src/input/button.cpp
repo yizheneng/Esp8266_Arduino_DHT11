@@ -7,7 +7,6 @@ Button::Button(int pin) :
   lastReadTime(0)
 {
   pinMode(pin, INPUT_PULLUP);
-  // digitalWrite(pin, HIGH);
 }
 
 bool Button::isPressed()

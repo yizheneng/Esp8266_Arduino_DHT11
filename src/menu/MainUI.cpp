@@ -5,7 +5,6 @@
 #include "../utils/weather.h"
 #include "../utils/news.h"
 #include "../icon/weathericon.h"
-#include "../button/button.h"
 #include "../displayDrivers/font/sseriff.h"
 #include "../displayDrivers/UIInterface.h"
 #include "NewsLabel.h"
@@ -13,10 +12,6 @@
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
-extern Button buttonL;
-extern Button buttonC;
-extern Button buttonR;
-// extern Button buttonUser;
 
 // 主界面
 MainUI::MainUI() :

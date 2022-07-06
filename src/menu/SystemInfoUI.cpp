@@ -1,7 +1,6 @@
 #include "SystemInfoUI.h"
 #include <DHT.h>
 #include <NTPClient.h>
-#include "../button/button.h"
 #include <ESP8266WiFi.h>
 extern uint8_t cpuUsage;
 
@@ -17,17 +16,15 @@ void SystemInfoUI::enter()
   clearDisplay();
 
   setXY(0, 0);
-  setFont(OLED_FONT_12X6);
+  setFont(OLED_FONT_8X6);
   setDisplayMode(0);
   printf("     System Info     ");
-
-  setFont(OLED_FONT_8X6);
   setDisplayMode(1);
-  setXY(0, 18);
+  setXY(0, 8);
   printf("Model:ESP12(esp8266)\r\n");
-  setXY(0, 18 + 8);
+  setXY(0, 8 + 8);
   printf("Flash Size:32Mbit\r\n");
-  setXY(0, 18 + 8 + 8); 
+  setXY(0, 8 + 8 + 8); 
   printf("Memory Size:4Mbit\r\n");
 }
 
@@ -51,10 +48,10 @@ int SystemInfoUI::event(const KEventCode& event)
 
 void SystemInfoUI::updateDisplay()
 {
-  setXY(0, 42);
+  setXY(0, 32);
   printf("SSID:%s\r\n", WiFi.SSID().c_str());
-  setXY(0, 42 + 8);
+  setXY(0, 32 + 8);
   printf("IP:%s", WiFi.localIP().toString().c_str());
-  setXY(0, 42 + 8 + 8);
+  setXY(0, 32 + 8 + 8);
   printf("CPU:%d    ", cpuUsage);
 }

@@ -3,12 +3,9 @@
 #include <NTPClient.h>
 #include "../utils/weather.h"
 #include "../icon/weathericon.h"
-#include "../button/button.h"
-
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
-// extern Button buttonUser;
 
 
 // 主界面
@@ -56,7 +53,9 @@ void WeatherUI::updateDisplay()
     setDisplayMode(1);
     setFont(OLED_FONT_8X6);
     setXY(0, 48);
-    printf("L:%d\r\nH:%d", weather.getWeathers()[0].lowTemp, weather.getWeathers()[0].highTemp);
+    printf("L:%d", weather.getWeathers()[0].lowTemp);
+    setXY(0, 48 + 8);
+    printf("H:%d", weather.getWeathers()[0].highTemp);
 
     setXY(32 + 16, 48);
     printf("L:%d", weather.getWeathers()[1].lowTemp);

@@ -5,7 +5,8 @@
 #include "src/displayDrivers/SSD1306SPI.h"
 #include "src/icon/weathericon.h"
 //#include "badapple.h"
-#include "src/button/button.h"
+#include "src/input/button.h"
+#include "src/input/adckeys.h"
 #include "src/utils/weather.h"
 #include "src/utils/news.h"
 #include "src/menu/MainUI.h"
@@ -15,7 +16,7 @@
 #include "src/menu/WeatherMenuUI.h"
 #include "src/menu/SettingsMenuUI.h"
 #include "src/menu/SettingsUI.h"
-#include "src/TestUI/ButtonTest.h"
+// #include "src/TestUI/ButtonTest.h"
 
 /**
  * TODO List:
@@ -51,7 +52,7 @@ uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 uint8_t cpuUsage;
 int nextWidget = -1;
 
-char ssid[] = "Cnbot_2.4G";
+char ssid[] = "Cnbot";
 char pass[] = "Cnbot001";
 
 char ssid1[] = "2291";
@@ -59,7 +60,8 @@ char pass1[] = "2911.2911";
 
 Button buttonL(D1);
 Button buttonC(D3);
-Button buttonR(D8);
+AdcKeys adcKey(A0);
+// Button buttonR(D8);
 // Button buttonUser(D3);
 
 UIInterface *uiPointers[UI_INDEX_MAX];
@@ -80,6 +82,8 @@ void setup()
   uiPointers[UI_INDEX_MENU_WEATHER] = new WeatherMenuUI();
   uiPointers[UI_INDEX_MENU_SETTINGS_UI] = new SettingsMenuUI();
   uiPointers[UI_INDEX_SETTINGS_UI] = new SettingsUI();
+
+  PIN_PULLUP_EN(PERIPHS_IO_MUX_MTDO_U);
 }
 
 void loop()
@@ -100,26 +104,33 @@ void loop()
         news.tickOnce();
       }
     } else {
-      static bool connectFlag = false;
-      if (!connectFlag) {
+      while(WiFi.status() != WL_CONNECTED) {
         int numSsid = WiFi.scanNetworks();
-        for (int i = 0; i < numSsid; i++) {
+        int i = 0;
+        for (; i < numSsid; i++) {
           Serial.println(WiFi.SSID(i));
           if (WiFi.SSID(i) == ssid) {
             WiFi.begin(ssid, pass);
-            connectFlag = true;
+            break;
           } else if (WiFi.SSID(i) == ssid1) {
             WiFi.begin(ssid1, pass1);
-            connectFlag = true;
+            break;
           }
         }
+
+        if(i < numSsid) 
+          delay(10000);
+        else 
+          delay(1000);
       }
     }
 
-  TICK_ONCE:
+TICK_ONCE:
     if(buttonL.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_LEFT));
     // if(buttonR.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
     if(buttonC.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
+    if(adcKey.getPinNum() >= 0) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
+
     uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 100)); // 滴答信号输入
 
     if (nextWidget >= 0) { // 大于0需要切换界面
@@ -131,9 +142,7 @@ void loop()
       }
     }
 
-    Serial.print("Sync display");
     oled.syncDisplay((uint8_t*)OLED_GRAM);
-    Serial.print("Sync display 1");
 
 #define MAIN_LOOP_WAIT_TIME 100 // 100ms
     int delayVal = (MAIN_LOOP_WAIT_TIME - (millis() - count100msCount)); // 计算需要等待的时间

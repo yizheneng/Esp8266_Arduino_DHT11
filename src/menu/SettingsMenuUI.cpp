@@ -1,10 +1,5 @@
 #include "SettingsMenuUI.h"
 #include "../icon/systemicon.h"
-#include "../button/button.h"
-extern Button buttonL;
-extern Button buttonC;
-extern Button buttonR;
-// extern Button buttonUser;
 
 // 主界面
 SettingsMenuUI::SettingsMenuUI() :

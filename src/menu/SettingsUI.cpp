@@ -1,9 +1,5 @@
 #include "SettingsUI.h"
 #include "../icon/systemicon.h"
-#include "../button/button.h"
-extern Button buttonL;
-extern Button buttonC;
-extern Button buttonR;
 
 // 主界面
 SettingsUI::SettingsUI() :
@@ -21,6 +17,7 @@ void SettingsUI::enter()
   setFont(OLED_FONT_12X6);
   setDisplayMode(0);
   printf("      Settings     ");
+  updateDisplay();
 }
 
 int SettingsUI::event(const KEventCode& event)
