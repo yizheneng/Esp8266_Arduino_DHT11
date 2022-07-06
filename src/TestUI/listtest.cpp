@@ -21,7 +21,11 @@ ListTest::ListTest() :
     addChild(listSelect);
 }
 
-void ListTest::tickOnce()
+int ListTest::event(const KEventCode &event)
 {
-    this->paint();
+    if(K_EVENT_CLASS_TICK_ONCE == K_EVENT_CLASS(event)) {
+        this->paint();
+    }
+
+    return KWidget::event(event);
 }

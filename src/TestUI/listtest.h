@@ -6,7 +6,7 @@ class ListTest  : public KWidget
 public:
     ListTest();
 
-    void tickOnce();
+    virtual int event(const KEventCode&);
 };
 
 #endif // LISTTEST_H

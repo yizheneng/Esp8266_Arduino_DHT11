@@ -1,8 +1,5 @@
 #include "ButtonTest.h"
 #include "../KWidgets/KCheckBox.h"
-#include "../utils/news.h"
-
-extern News news;
 
 ButtonTest::ButtonTest(/* args */) :
     KWidget(0, 0, 128, 64)
@@ -31,9 +28,11 @@ ButtonTest::~ButtonTest()
 {
 }
 
-void ButtonTest::tickOnce()
+int ButtonTest::event(const KEventCode &event)
 {
-    this->paint();
+    if(K_EVENT_CLASS_TICK_ONCE == K_EVENT_CLASS(event)) {
+        this->paint();
+    }
 
-    testLabel->setText(news.getNextNews());
+    return KWidget::event(event);
 }

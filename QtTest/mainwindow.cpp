@@ -48,8 +48,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(displayTimer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
     displayTimer->start(100);
 
-//    testUI = new ListTest();
-    testUI = new ButtonTest();
+    testUI = new ListTest();
+//    testUI = new ButtonTest();
 
     this->setStyleSheet("background-color: #CDC5BF;");
 
@@ -78,39 +78,39 @@ void MainWindow::syncToImage()
 
 void MainWindow::onTimeOut()
 {
-    ((ListTest*)testUI)->tickOnce();
-    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 10)); // 滴答信号输入
+//    testUI->tickOnce();
+    testUI->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 10)); // 滴答信号输入
     syncToImage();
     displayLabel->setPixmap(QPixmap::fromImage(*displayImage));
 }
 
 void MainWindow::onUpBtnClicked()
 {
-    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_UP));
+    testUI->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_UP));
     qDebug() << "UP";
 }
 
 void MainWindow::onDownBtnClicked()
 {
-    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_DOWN));
+    testUI->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_DOWN));
     qDebug() << "DOWN";
 }
 
 void MainWindow::onLeftBtnClicked()
 {
-    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_LEFT));
+    testUI->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_LEFT));
     qDebug() << "LEFT";
 }
 
 void MainWindow::onRightBtnClicked()
 {
-    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
+    testUI->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
     qDebug() << "RIGHT";
 }
 
 void MainWindow::onOKBtnClicked()
 {
-    ((ListTest*)testUI)->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
+    testUI->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
     qDebug() << "OK";
 }
 

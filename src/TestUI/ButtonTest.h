@@ -10,7 +10,7 @@ public:
     ButtonTest(/* args */);
     ~ButtonTest();
 
-    void tickOnce();
+    virtual int event(const KEventCode&);
     
 private:
     KLabel* testLabel;
