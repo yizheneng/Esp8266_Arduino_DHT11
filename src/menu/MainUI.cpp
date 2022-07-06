@@ -38,7 +38,6 @@ MainUI::MainUI() :
 void MainUI::enter()
 {
   UIInterface::enter();
-  Serial.println("Test 5!");
   clearDisplay();
 }
 
@@ -59,10 +58,11 @@ int MainUI::event(const KEventCode& event)
     break;
   case K_EVENT_CLASS_TICK_ONCE:
     updateDisplay();
+    // return KWidget::event(event);
     break;
   }
 
-  return KWidget::event(event);
+  return 0;
 }
 
 void MainUI::updateDisplay()

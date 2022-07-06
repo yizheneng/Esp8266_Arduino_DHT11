@@ -56,10 +56,12 @@ int KWidget::runChildEvent(const KEventCode& event)
     switch (K_EVENT_CLASS(event)) {
     case K_EVENT_CLASS_KEY: {
         int8_t currentFused = 0;
-        for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
+        uint8_t childNumber = childNum();
+        for(int i = 0; i < childNumber; i++) {
             if((childs[i] != 0) && childs[i]->isVisible && childs[i]->isFoused) {
                 currentFused = i;
-                 childs[i]->setFoused(false);
+                childs[i]->setFoused(false);
+                break;
             }
         }
 
@@ -67,26 +69,32 @@ int KWidget::runChildEvent(const KEventCode& event)
                 || (K_EVENT_DATA(event) == K_EVENT_KEY_LEFT)) {
             currentFused --;
             if(currentFused < 0) {
-                currentFused = childNum() - 1;
+                currentFused = childNumber - 1;
             }
+
+            childs[currentFused]->setFoused(true);
+            childs[currentFused]->event(event);
         }
 
         if((K_EVENT_DATA(event) == K_EVENT_KEY_DOWN)
                 || (K_EVENT_DATA(event) == K_EVENT_KEY_RIGHT)) {
             currentFused ++;
-            if(currentFused >= childNum()) {
+            if(currentFused >= childNumber) {
                 currentFused = 0;
             }
-        }
 
-        childs[currentFused]->setFoused(true);
-        childs[currentFused]->event(event);
+            childs[currentFused]->setFoused(true);
+            childs[currentFused]->event(event);
+        }
         break;
     }
     default:
-        for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
-            if((childs[i] != 0) && childs[i]->isVisible) {
-                childs[i]->event(event);
+        {
+            uint8_t childNumber = childNum();
+            for(int i = 0; i < childNumber; i++) {
+                if((childs[i] != 0) && childs[i]->isVisible) {
+                    childs[i]->event(event);
+                }
             }
         }
     }
