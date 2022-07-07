@@ -1,8 +1,8 @@
 #include "WeatherUI.h"
 #include <DHT.h>
 #include <NTPClient.h>
-#include "../utils/weather.h"
-#include "../icon/weathericon.h"
+#include "../../utils/weather.h"
+#include "../../icon/weathericon.h"
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;

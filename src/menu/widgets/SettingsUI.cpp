@@ -1,5 +1,5 @@
 #include "SettingsUI.h"
-#include "../icon/systemicon.h"
+#include "../../icon/systemicon.h"
 
 // 主界面
 SettingsUI::SettingsUI() :

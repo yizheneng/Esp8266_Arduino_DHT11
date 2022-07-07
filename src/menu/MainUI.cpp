@@ -7,7 +7,7 @@
 #include "../icon/weathericon.h"
 #include "../displayDrivers/font/sseriff.h"
 #include "../displayDrivers/UIInterface.h"
-#include "NewsLabel.h"
+#include "widgets/NewsLabel.h"
 
 extern DHT dht;
 extern NTPClient timeClient;

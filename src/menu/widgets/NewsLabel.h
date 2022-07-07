@@ -1,6 +1,6 @@
 #ifndef _NEWS_LABEL_H_
 #define _NEWS_LABEL_H_
-#include "../KWidgets/KLabel.h"
+#include "../../KWidgets/KLabel.h"
 
 class NewsLabel : public KLabel
 {

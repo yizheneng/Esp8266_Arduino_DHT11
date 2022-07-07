@@ -10,12 +10,12 @@
 #include "src/utils/weather.h"
 #include "src/utils/news.h"
 #include "src/menu/MainUI.h"
-#include "src/menu/WeatherUI.h"
-#include "src/menu/SystemInfoUI.h"
+#include "src/menu/widgets/WeatherUI.h"
+#include "src/menu/widgets/SystemInfoUI.h"
 #include "src/menu/SystemInfoMenuUI.h"
 #include "src/menu/WeatherMenuUI.h"
 #include "src/menu/SettingsMenuUI.h"
-#include "src/menu/SettingsUI.h"
+#include "src/menu/widgets/SettingsUI.h"
 // #include "src/TestUI/ButtonTest.h"
 
 /**

@@ -1,5 +1,5 @@
 #include "NewsLabel.h"
-#include "../utils/news.h"
+#include "../../utils/news.h"
 
 extern News news;
 

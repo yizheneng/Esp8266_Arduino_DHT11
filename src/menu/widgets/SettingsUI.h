@@ -1,6 +1,6 @@
 #ifndef _SETTINGS_UI_H_
 #define _SETTINGS_UI_H_
-#include "../displayDrivers/UIInterface.h"
+#include "../../displayDrivers/UIInterface.h"
 
 enum  SettingsUIState {
   SETTINGS_UI_STATE_WIFI_SETTINGS = 0, // WIFI 配置

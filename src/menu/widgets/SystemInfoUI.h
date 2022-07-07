@@ -1,6 +1,6 @@
 #ifndef _SYSTEM_INFO_UI_H_
 #define _SYSTEM_INFO_UI_H_
-#include "../displayDrivers/UIInterface.h"
+#include "../../displayDrivers/UIInterface.h"
 
 class SystemInfoUI : public UIInterface {
 public:

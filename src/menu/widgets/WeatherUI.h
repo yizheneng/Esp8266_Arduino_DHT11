@@ -1,6 +1,6 @@
 #ifndef _WEATHER_UI_H_
 #define _WEATHER_UI_H_
-#include "../displayDrivers/UIInterface.h"
+#include "../../displayDrivers/UIInterface.h"
 
 class WeatherUI : public UIInterface {
 public:
