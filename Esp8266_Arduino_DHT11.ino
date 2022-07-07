@@ -89,30 +89,38 @@ void loop()
   while (1)  {
     count100msCount = millis();
     static uint32_t count5S = millis();
-    if((millis() - count5S) > 5000) {
+    if((WiFi.status() == WL_CONNECTED) 
+        && ((millis() - count5S) > 5000)) {
       count5S = millis();
       if (WiFi.status() == WL_CONNECTED) {
         timeClient.update();
         weather.tickOnce();
         news.tickOnce();
-      } else {
-        int numSsid = WiFi.scanNetworks();
-        int i = 0;
-        for (; i < numSsid; i++) {
-          Serial.println(WiFi.SSID(i));
+      } 
+    }
 
-          if ((WiFi.SSID(i) == "Cnbot")) {
-            Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
-            WiFi.begin("Cnbot", "Cnbot001");
-            break;
-          } else if ((WiFi.SSID(i) == "2291")) {
-            Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
-            WiFi.begin("2291", "2911.2911");
-            break;
-          }
+    static uint32_t count30S = millis() - 30000;
+    if((WiFi.status() != WL_CONNECTED) 
+        && ((millis() - count30S) > 30000)) {
+      count30S = millis();
+
+      int numSsid = WiFi.scanNetworks();
+      int i = 0;
+      for (; i < numSsid; i++) {
+        Serial.println(WiFi.SSID(i));
+
+        if ((WiFi.SSID(i) == "Cnbot")) {
+          Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
+          WiFi.begin("Cnbot", "Cnbot001");
+          break;
+        } else if ((WiFi.SSID(i) == "2291")) {
+          Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
+          WiFi.begin("2291", "2911.2911");
+          break;
         }
       }
     }
+        
 
 TICK_ONCE:
     if(buttonL.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_LEFT));
