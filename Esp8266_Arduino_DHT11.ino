@@ -52,12 +52,6 @@ uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 uint8_t cpuUsage;
 int nextWidget = -1;
 
-char ssid[] = "Cnbot";
-char pass[] = "Cnbot001";
-
-char ssid1[] = "2291";
-char pass1[] = "2911.2911";
-
 Button buttonL(D1);
 Button buttonC(D3);
 AdcKeys adcKey(A0);
@@ -70,7 +64,6 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  WiFi.begin(ssid1, pass1);
   dht.begin();
   oled.begin();
   timeClient.begin();
@@ -95,33 +88,29 @@ void loop()
   uiPointers[currentUIIndex]->enter();
   while (1)  {
     count100msCount = millis();
-    if (WiFi.status() == WL_CONNECTED) {
-      static uint32_t count5S = millis();
-      if((millis() - count5S) > 5000) {
-        count5S = millis();
+    static uint32_t count5S = millis();
+    if((millis() - count5S) > 5000) {
+      count5S = millis();
+      if (WiFi.status() == WL_CONNECTED) {
         timeClient.update();
         weather.tickOnce();
         news.tickOnce();
-      }
-    } else {
-      while(WiFi.status() != WL_CONNECTED) {
+      } else {
         int numSsid = WiFi.scanNetworks();
         int i = 0;
         for (; i < numSsid; i++) {
           Serial.println(WiFi.SSID(i));
-          if (WiFi.SSID(i) == ssid) {
-            WiFi.begin(ssid, pass);
+
+          if ((WiFi.SSID(i) == "Cnbot")) {
+            Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
+            WiFi.begin("Cnbot", "Cnbot001");
             break;
-          } else if (WiFi.SSID(i) == ssid1) {
-            WiFi.begin(ssid1, pass1);
+          } else if ((WiFi.SSID(i) == "2291")) {
+            Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
+            WiFi.begin("2291", "2911.2911");
             break;
           }
         }
-
-        if(i < numSsid) 
-          delay(10000);
-        else 
-          delay(1000);
       }
     }
 
@@ -130,7 +119,6 @@ TICK_ONCE:
     // if(buttonR.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
     if(buttonC.isClicked()) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_OK));
     if(adcKey.getPinNum() >= 0) uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_KEY, K_EVENT_KEY_RIGHT));
-
     uiPointers[currentUIIndex]->event(K_EVENT(K_EVENT_CLASS_TICK_ONCE, 100)); // 滴答信号输入
 
     if (nextWidget >= 0) { // 大于0需要切换界面

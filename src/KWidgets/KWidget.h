@@ -3,6 +3,7 @@
 #include "KEvent.h"
 #include "../displayDrivers/DrawOnMemory.h"
 #include <string.h>
+// #include <Arduino.h>
 
 #define bzero(a, b)             memset(a, 0, b)
 #define K_WIDGET_MAX_CHILD_NUM 15

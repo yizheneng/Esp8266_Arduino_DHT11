@@ -2,7 +2,7 @@
 #include <Arduino.h>
 
 #define NO_KEY -1
-#define DELAY_TIME 500 //ms
+#define DELAY_TIME 200 //ms
 
 AdcKeys::AdcKeys(int adcPin) :
     adcPin(adcPin)
@@ -20,15 +20,13 @@ int AdcKeys::getPinNum()
         return NO_KEY;
     }
 
-    delaytime = millis();
-
     int val = analogRead(adcPin);
-
-    Serial.print("Adc value:");
-    Serial.print(val, 10);
-    Serial.println("");
+    // Serial.print("Adc value:");
+    // Serial.print(val, 10);
+    // Serial.println("");
 
     if(val < 100) {
+        delaytime = millis();
         return 0;
     }
 

@@ -33,6 +33,11 @@ int SettingsMenuUI::event(const KEventCode& event)
       nextWidget = UI_INDEX_SETTINGS_UI;
       break;
     }
+
+    if(K_EVENT_DATA(event) == K_EVENT_KEY_RIGHT) {
+      nextWidget = UI_INDEX_MENU_SYSTEM_INFO;
+      break;
+    }
     break;
   case K_EVENT_CLASS_TICK_ONCE:
     updateDisplay();

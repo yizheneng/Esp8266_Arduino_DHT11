@@ -1,5 +1,4 @@
 #include "KWidget.h"
-
 extern uint8_t OLED_GRAM[144][8];
 
 KWidget::KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
@@ -58,10 +57,10 @@ int KWidget::runChildEvent(const KEventCode& event)
         int8_t currentFused = 0;
         uint8_t childNumber = childNum();
         for(int i = 0; i < childNumber; i++) {
-            if((childs[i] != 0) && childs[i]->isVisible && childs[i]->isFoused) {
+            if(childs[i] == 0) break;
+            if(childs[i]->isVisible && childs[i]->isFoused) {
                 currentFused = i;
                 childs[i]->setFoused(false);
-                break;
             }
         }
 
@@ -89,12 +88,10 @@ int KWidget::runChildEvent(const KEventCode& event)
         break;
     }
     default:
-        {
-            uint8_t childNumber = childNum();
-            for(int i = 0; i < childNumber; i++) {
-                if((childs[i] != 0) && childs[i]->isVisible) {
-                    childs[i]->event(event);
-                }
+        for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
+            if(childs[i] == 0) break;
+            if(childs[i]->isVisible) {
+                childs[i]->event(event);
             }
         }
     }
@@ -108,7 +105,8 @@ void KWidget::paint()
     }
 
     for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
-        if((childs[i] != 0) && childs[i]->isVisible) {
+        if(childs[i] == 0) return;
+        if(childs[i]->isVisible) {
             childs[i]->paint();
         }
     }

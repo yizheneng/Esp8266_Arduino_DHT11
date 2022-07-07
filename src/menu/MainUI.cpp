@@ -52,13 +52,13 @@ int MainUI::event(const KEventCode& event)
     }
 
     if(K_EVENT_DATA(event) == K_EVENT_KEY_RIGHT) {
-      nextWidget = UI_INDEX_MENU_SYSTEM_INFO;
+      nextWidget = UI_INDEX_MENU_SETTINGS_UI;
       return 0;
     }
     break;
   case K_EVENT_CLASS_TICK_ONCE:
     updateDisplay();
-    // return KWidget::event(event);
+    return KWidget::event(event);
     break;
   }
 
@@ -74,8 +74,7 @@ void MainUI::updateDisplay()
   time_t rawtime = timeClient.getEpochTime();
   struct tm *info;
   info = localtime( &rawtime );
-  
-  char printBuf[40];
+  char printBuf[80];
   sprintf(printBuf, "%02d:%02d:%02d", info->tm_hour, info->tm_min, info->tm_sec);            // 时间显示
   timeLabel->setText(printBuf);
 
