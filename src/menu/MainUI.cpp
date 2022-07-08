@@ -4,7 +4,9 @@
 #include <NTPClient.h>
 #include "../utils/weather.h"
 #include "../utils/news.h"
+#include "../utils/usboutpower.h"
 #include "../icon/weathericon.h"
+#include "../icon/systemicon.h"
 #include "../displayDrivers/font/sseriff.h"
 #include "../displayDrivers/UIInterface.h"
 #include "widgets/NewsLabel.h"
@@ -12,6 +14,7 @@
 extern DHT dht;
 extern NTPClient timeClient;
 extern Weather weather;
+extern UsboutPower usboutPower;
 
 // 主界面
 MainUI::MainUI() :
@@ -24,15 +27,19 @@ MainUI::MainUI() :
   tempAndHumLabel->setScroll(true);
   
   weatherIcon = new KImage(0, 0, 32, 32);
+  chargerIcon = new KImage(0, 31, 32, 32);
  
   this->addChild(weatherIcon);
   this->addChild(timeLabel);
   this->addChild(dateLabel);
   this->addChild(tempAndHumLabel);
+  this->addChild(chargerIcon);
 
   newsLabel = new NewsLabel(0, 47, 128, 16);
   newsLabel->setScroll(true);
   this->addChild(newsLabel);
+
+  chargerIcon->setImage((uint8_t*)systemIcon48X48[SYSTEM_ICON_CHARGER], true);
 }
 
 void MainUI::enter()
@@ -70,6 +77,17 @@ void MainUI::updateDisplay()
   if(weather.isUpdated()) {
     weatherIcon->setImage((uint8_t*)picture32X32[weather.getWeathers()[0].weatherIconCode], true);
   }
+
+  if(usboutPower.getState()) {
+    tempAndHumLabel->setGeometry(31, 31, 128, 16);
+    newsLabel->setGeometry(31, 47, 128, 16);
+    chargerIcon->setVisible(true);
+  } else {
+    tempAndHumLabel->setGeometry(0, 31, 128, 16);
+    newsLabel->setGeometry(0, 47, 128, 16);
+    chargerIcon->setVisible(false);
+  }
+  
 
   time_t rawtime = timeClient.getEpochTime();
   struct tm *info;

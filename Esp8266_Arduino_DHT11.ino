@@ -9,6 +9,7 @@
 #include "src/input/adckeys.h"
 #include "src/utils/weather.h"
 #include "src/utils/news.h"
+#include "src/utils/usboutpower.h"
 #include "src/menu/MainUI.h"
 #include "src/menu/widgets/WeatherUI.h"
 #include "src/menu/widgets/SystemInfoUI.h"
@@ -20,15 +21,15 @@
 
 /**
  * TODO List:
- * 1.每天重要新闻推送
- * 2.点阵显示界面框架
- *   1) KWidget基类
- *      方法:paint 调用时更新控件绘图
- *           event 接收键盘等事件
- *           addChild 添加子控件
- *   2）KLabel  类 显示文字
+ * 1.每天重要新闻推送 √
+ * 2.点阵显示界面框架 
+ *   1) KWidget基类 √
+ *      方法:paint 调用时更新控件绘图 √
+ *           event 接收键盘等事件 √
+ *           addChild 添加子控件 √
+ *   2）KLabel  类 显示文字 √
  *   3）KButton 类 点击产生事件
- *   4）KImage  类 显示图片（点阵图片）
+ *   4）KImage  类 显示图片（点阵图片）√
  *   5）KLineEdit 类 编辑单行文本
  *   6）KSpinBox  类 编辑整数
  *   7) KDoubleSpinBox 类 编辑浮点数
@@ -37,6 +38,10 @@
  *   10) KProcess   类 进度条显示控件
  *   11) KChooseBox 类 选择显示控件
  * 3.天气界面根据日出日落时间来进行图标切换
+ * 4.wifi 设置功能
+ * 5.USB 电源控制功能
+ * 6.adc keys 多按键支持功能
+ * 7.最近七天天气情况显示功能
  * 
 */
 
@@ -48,6 +53,8 @@ NTPClient timeClient(ntpUDP, 8 * 60 * 60);
 Weather weather(weatherClient);
 WiFiClient newsClient;
 News news(newsClient);
+UsboutPower usboutPower(D2);
+
 uint8_t OLED_GRAM[144][8];     // 页面显示缓存
 uint8_t cpuUsage;
 int nextWidget = -1;
@@ -89,6 +96,8 @@ void loop()
   while (1)  {
     count100msCount = millis();
     static uint32_t count5S = millis();
+
+    usboutPower.tickOnce();
     if((WiFi.status() == WL_CONNECTED) 
         && ((millis() - count5S) > 5000)) {
       count5S = millis();
@@ -109,13 +118,13 @@ void loop()
       for (; i < numSsid; i++) {
         Serial.println(WiFi.SSID(i));
 
-        if ((WiFi.SSID(i) == "Cnbot")) {
+        if ((WiFi.SSID(i) == "Cnbot_2.4G")) {
           Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
-          WiFi.begin("Cnbot", "Cnbot001");
+          WiFi.begin(WiFi.SSID(i), "Cnbot001");
           break;
         } else if ((WiFi.SSID(i) == "2291")) {
           Serial.printf("Connect to wifi '%s'\r\n", WiFi.SSID(i));
-          WiFi.begin("2291", "2911.2911");
+          WiFi.begin(WiFi.SSID(i), "2911.2911");
           break;
         }
       }

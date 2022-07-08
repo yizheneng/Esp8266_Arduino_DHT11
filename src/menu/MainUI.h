@@ -26,6 +26,7 @@ private:
   KLabel* newsLabel;
 
   KImage* weatherIcon;
+  KImage* chargerIcon;
 };
 
 #endif

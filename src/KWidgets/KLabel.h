@@ -15,6 +15,8 @@ public:
 
     std::string getText();
 
+    void setGeometry(uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+
     virtual int event(const KEventCode&);
 
     virtual void paint();

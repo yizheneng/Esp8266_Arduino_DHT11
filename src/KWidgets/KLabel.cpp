@@ -62,3 +62,11 @@ void KLabel::setScroll(bool val)
 {
     this->isScroll = val;
 }
+
+void KLabel::setGeometry(uint8_t x, uint8_t y, uint8_t w, uint8_t h)
+{
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
+}

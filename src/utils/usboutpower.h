@@ -9,8 +9,11 @@ public:
     ~UsboutPower();
 
     void tickOnce();
+
+    bool getState();
 private:
     uint8_t controlPin;
+    bool state;
 };
 
 
