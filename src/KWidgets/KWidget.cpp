@@ -4,10 +4,6 @@ extern uint8_t OLED_GRAM[144][8];
 KWidget::KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     DrawOnMemory((uint8_t*)OLED_GRAM, x, y, w, h),
     isVisible(true),
-    x(x),
-    y(y),
-    w(w),
-    h(h),
     alignmentFlag(AlignHCenter|AlignVCenter),
     isFoused(false)
 {

@@ -67,9 +67,11 @@ public:
       mode = val;
     }
 
+    void setGeometry(uint8_t x, uint8_t y, uint8_t w, uint8_t h);
+
 protected:
     int16_t mode, lastX, lastY;
-    int16_t minX, minY, maxX, maxY;
+    int16_t minX, minY, maxX, maxY, x, y, w, h;
     const uint8_t* fontPtr;
     int8_t fontWidth;
     int8_t fontHeight;

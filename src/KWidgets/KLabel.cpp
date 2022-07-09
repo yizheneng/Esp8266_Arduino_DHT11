@@ -51,22 +51,14 @@ int KLabel::event(const KEventCode& event)
 void KLabel::paint()
 {
     if(isScroll) {
-        this->showString(x - this->currentPose, y, text.c_str(), !isFoused);
+        this->showString(minX - this->currentPose, minY, text.c_str(), !isFoused);
         // Serial.printf("this->currentPose:%d\r\n", this->currentPose);
     } else {
-        this->showString(x, y, text.c_str(), !isFoused);
+        this->showString(minX, minY, text.c_str(), !isFoused);
     }
 }
 
 void KLabel::setScroll(bool val)
 {
     this->isScroll = val;
-}
-
-void KLabel::setGeometry(uint8_t x, uint8_t y, uint8_t w, uint8_t h)
-{
-    this->x = x;
-    this->y = y;
-    this->w = w;
-    this->h = h;
 }

@@ -48,11 +48,11 @@ protected:
 
     bool isVisible;
 
-    uint8_t x, y, w, h;
-
     uint8_t alignmentFlag;
 
     KWidget* childs[K_WIDGET_MAX_CHILD_NUM];
+
+    // uint8_t x,y,w,h;
 };
 
 #endif

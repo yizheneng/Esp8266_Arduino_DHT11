@@ -18,7 +18,11 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr) :
     minX(0),
     minY(0),
     maxX(DRAW_MAX_X),
-    maxY(DRAW_MAX_Y)
+    maxY(DRAW_MAX_Y),
+    x(0),
+    y(0),
+    w(DRAW_MAX_X),
+    h(DRAW_MAX_Y)
 {
 
 }
@@ -35,9 +39,25 @@ DrawOnMemory::DrawOnMemory(uint8_t* gramPtr, uint8_t x, uint8_t y, uint8_t w, ui
   minX(x),
   minY(y),
   maxX(x + w),
-  maxY(y + h + 1)
+  maxY(y + h + 1),
+  x(x),
+  y(y),
+  w(w),
+  h(h)
 {
 
+}
+
+void DrawOnMemory::setGeometry(uint8_t x, uint8_t y, uint8_t w, uint8_t h)
+{
+  minX = x;
+  minY = y;
+  maxX = x + w;
+  maxY = y + h + 1;
+  this->x = x;
+  this->y = y;
+  this->w = w;
+  this->h = h;
 }
 
 //画点 
