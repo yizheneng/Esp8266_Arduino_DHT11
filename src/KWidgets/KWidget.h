@@ -48,6 +48,8 @@ protected:
 
     bool isVisible;
 
+    bool isFouseAble;
+
     uint8_t alignmentFlag;
 
     KWidget* childs[K_WIDGET_MAX_CHILD_NUM];

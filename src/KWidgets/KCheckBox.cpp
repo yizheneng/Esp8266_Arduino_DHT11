@@ -4,7 +4,7 @@ KCheckBox::KCheckBox(std::string text, uint8_t x, uint8_t y, uint8_t w, uint8_t 
     KLabel(text, x, y, w, h),
     isChecked(false)
 {
-
+    isFouseAble = true;
 }
 
 void KCheckBox::setChecked(bool val)

@@ -3,6 +3,7 @@
 KButton::KButton(std::string text, uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     KLabel(text, x, y, w, h)
 {
+    isFouseAble = true;
 }
 
 KButton::~KButton()

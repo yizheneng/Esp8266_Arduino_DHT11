@@ -5,7 +5,8 @@ KWidget::KWidget(uint8_t x, uint8_t y, uint8_t w, uint8_t h) :
     DrawOnMemory((uint8_t*)OLED_GRAM, x, y, w, h),
     isVisible(true),
     alignmentFlag(AlignHCenter|AlignVCenter),
-    isFoused(false)
+    isFoused(false),
+    isFouseAble(false)
 {
     bzero(childs, sizeof(childs));
 }
@@ -67,8 +68,23 @@ int KWidget::runChildEvent(const KEventCode& event)
                 currentFused = childNumber - 1;
             }
 
-            childs[currentFused]->setFoused(true);
-            childs[currentFused]->event(event);
+            uint8_t i = 0;
+            while(1) {
+                if(childs[currentFused]->isFouseAble) {
+                    childs[currentFused]->setFoused(true);
+                    break;
+                } else {
+                    currentFused --;
+                    if(currentFused < 0) {
+                        currentFused = childNumber - 1;
+                    }
+                }
+
+                i++;
+                if(i > childNumber) {
+                    break;
+                }
+            }
         }
 
         if((K_EVENT_DATA(event) == K_EVENT_KEY_DOWN)
@@ -78,17 +94,34 @@ int KWidget::runChildEvent(const KEventCode& event)
                 currentFused = 0;
             }
 
-            childs[currentFused]->setFoused(true);
-            childs[currentFused]->event(event);
+            uint8_t i = 0;
+            while(1) {
+                if(childs[currentFused]->isFouseAble) {
+                    childs[currentFused]->setFoused(true);
+                    break;
+                } else {
+                    currentFused ++;
+                    if(currentFused >= childNumber) {
+                        currentFused = 0;
+                    }
+                }
+
+                i++;
+                if(i > childNumber) {
+                    break;
+                }
+            }
         }
         break;
     }
     default:
-        for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
-            if(childs[i] == 0) break;
-            if(childs[i]->isVisible) {
-                childs[i]->event(event);
-            }
+        break;
+    }
+
+    for(int i = 0; i < K_WIDGET_MAX_CHILD_NUM; i++) {
+        if(childs[i] == 0) break;
+        if(childs[i]->isVisible) {
+            childs[i]->event(event);
         }
     }
     return 0;
